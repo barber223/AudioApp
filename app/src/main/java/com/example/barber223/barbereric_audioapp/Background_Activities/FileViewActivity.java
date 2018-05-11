@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.barber223.barbereric_audioapp.KeyClassHolder;
+
 public class FileViewActivity extends Activity {
 
     //This activity is for downloading and configuring all of the files within the system.
@@ -27,6 +29,11 @@ public class FileViewActivity extends Activity {
             switch (startingIntent.getAction()) {
                 case action_cloud:
                     //start the service to pull the files from the cloud to push into the category view
+
+                   // Intent startFile_View = new Intent(this, FileViewActivity.class);
+                   // startFile_View.setAction(KeyClassHolder.action_cloud);
+
+
                     break;
 
                 case action_file:

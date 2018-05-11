@@ -33,6 +33,18 @@
 
         </activity>
 
+
+
+        <service android:name=".Services.CloudStorage_Service"/>
+
+        <service android:name=".Services.DataDeviceMediaLoader"/>
+
+        <service android:name=".Services.DataCloudPushService"/>
+
+        <service android:name=".Services.MediaPlayerService"/>
+
+        <service android:name=".Services.MediaRecorderServiceClass"/>
+
     </application>
 
 </manifest>

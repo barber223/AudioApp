@@ -11,4 +11,6 @@ public class KeyClassHolder {
     public static final String action_cloud = "android.intent.action.cloud_view";
     public static final String action_record = "android.intent.action.record_view";
 
+    private static final String KEY_holder = "";
+
 }
