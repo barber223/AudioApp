@@ -13,5 +13,7 @@ public class CloudStorage_Service extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
+
+
     }
 }

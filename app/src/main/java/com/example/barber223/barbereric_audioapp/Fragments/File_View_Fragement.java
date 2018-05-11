@@ -25,7 +25,7 @@ public class File_View_Fragement extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_selection_fragment_layout, container, false);
+        return inflater.inflate(R.layout.file_view_fragment_layout, container, false);
     }
 
     //need a way for 3 diffrent views within for data
