@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="selection_menu_background">#696768</color>
-    <color name="selection_menu_text_accent">#e9e6e7</color>
+    <color name="selection_menu_text_accent">#dfdbdc</color>
+
+    <color name="selected_menu_textAccent">#fffefe</color>
 
 </resources>

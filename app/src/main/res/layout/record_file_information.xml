@@ -97,6 +97,14 @@
                 android:src="@mipmap/ic_skip_next_black_24dp"
                 />
 
+            <ImageButton
+                android:id="@+id/record_btn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+
+                />
+
+
         </LinearLayout>
 
     </LinearLayout>

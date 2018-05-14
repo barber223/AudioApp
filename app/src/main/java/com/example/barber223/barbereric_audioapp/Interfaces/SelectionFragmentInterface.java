@@ -8,4 +8,5 @@ public interface SelectionFragmentInterface {
 
     void actionOfViewS(String _action);
 
+    String getActiveProcess();
 }

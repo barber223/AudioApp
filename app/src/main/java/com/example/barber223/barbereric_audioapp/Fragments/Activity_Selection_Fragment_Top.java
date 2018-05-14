@@ -18,6 +18,8 @@ import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInt
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
 
+import static com.example.barber223.barbereric_audioapp.R.color.selected_menu_textAccent;
+
 public class Activity_Selection_Fragment_Top extends Fragment implements View.OnClickListener{
     //This fragment will be used for selecting between files, record, or cloud menu
 
@@ -51,15 +53,31 @@ public class Activity_Selection_Fragment_Top extends Fragment implements View.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //I do not believe that I need to reset after a press for the fragment will be reloaded.
+
         //set the navagational btns
-        Button btn = view.findViewById(R.id.record_btn);
-            btn.setOnClickListener(this);
+        Button recordBtn = view.findViewById(R.id.record_btn);
+        recordBtn.setOnClickListener(this);
 
-            btn = view.findViewById(R.id.cloud_btn);
-            btn.setOnClickListener(this);
+        Button cloudBtn = view.findViewById(R.id.cloud_btn);
+        cloudBtn.setOnClickListener(this);
 
-            btn = view.findViewById(R.id.files_btn);
-            btn.setOnClickListener(this);
+        Button filesBtn = view.findViewById(R.id.files_btn);
+        filesBtn.setOnClickListener(this);
+
+        switch (mListener.getActiveProcess()){
+            case KeyClassHolder.action_cloud:
+                cloudBtn.setTextColor(getResources().getColor(R.color.selected_menu_textAccent, null));
+                break;
+
+            case KeyClassHolder.action_file:
+                filesBtn.setTextColor(getResources().getColor(R.color.selected_menu_textAccent, null));
+                break;
+
+            case KeyClassHolder.action_record:
+                recordBtn.setTextColor(getResources().getColor(R.color.selected_menu_textAccent, null));
+                break;
+        }
 
     }
 

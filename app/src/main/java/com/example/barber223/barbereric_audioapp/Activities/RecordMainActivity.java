@@ -2,27 +2,25 @@
 //DVP6-1806
 //RecordMainActivity.java
 
-package com.example.barber223.barbereric_audioapp;
+package com.example.barber223.barbereric_audioapp.Activities;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.example.barber223.barbereric_audioapp.Background_Activities.FileViewActivity;
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
 import com.example.barber223.barbereric_audioapp.Fragments.File_View_Fragement;
 import com.example.barber223.barbereric_audioapp.Fragments.RecordInformationFragment;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
+import com.example.barber223.barbereric_audioapp.KeyClassHolder;
+import com.example.barber223.barbereric_audioapp.R;
 
 public class RecordMainActivity extends AppCompatActivity implements SelectionFragmentInterface{
 
-
+    private String activeDeviceProcess = KeyClassHolder.action_record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +40,6 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
         if (!hasPermisisons(this, mPermissions)){
             ActivityCompat.requestPermissions(this, mPermissions, 0x0101);
         }
-
-        /*
-        for (int i = 0; i < mPermissions.length; i ++){
-            if (ContextCompat.checkSelfPermission(this, mPermissions[i]) != PackageManager.PERMISSION_GRANTED){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{mPermissions[i]}, 0x0010);
-                }
-            }else{
-                finish();
-            }
-        }
-        */
     }
 
     private boolean hasPermisisons(Context _context, String... permissions){
@@ -69,14 +55,36 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
     @Override
     public void actionOfViewS(String _action) {
+        //set the ui elements place holder based off the action
+        activeDeviceProcess = _action;
 
-        //perform the actions for the users desired interactions
-        //needs to start the background activity
-        Intent startFileProceses = new Intent(this, FileViewActivity.class);
-        startFileProceses.setAction(_action);
-        //may switch to results if need be
-        //startActivity(startFileProceses);
+        //if the user selects a different menu option then there needs to be a way to load in the
+        //new activity
+
+        switch (_action){
+            case KeyClassHolder.action_cloud:
+                Intent newActivity = new Intent(this, CloudViewActivity.class);
+                newActivity.setAction(KeyClassHolder.action_cloud);
+                startActivity(newActivity);
+                break;
+
+            case KeyClassHolder.action_file:
+                Intent activity = new Intent(this, FileViewActivity.class);
+                activity.setAction(KeyClassHolder.action_file);
+                startActivity(activity);
+                break;
+        }
+
 
 
     }
+
+    @Override
+    public String getActiveProcess() {
+        return activeDeviceProcess;
+    }
+
+
+
+
 }
