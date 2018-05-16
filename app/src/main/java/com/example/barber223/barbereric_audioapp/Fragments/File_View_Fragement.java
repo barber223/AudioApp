@@ -13,6 +13,7 @@ import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
+import com.example.barber223.barbereric_audioapp.baseAdapter;
 
 import java.io.File;
 
@@ -94,8 +95,14 @@ public class File_View_Fragement extends ListFragment {
                             String name = String.valueOf(catName);
                             categoryNames[i] = name;
                         }
+                        /*
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
                         adapter.addAll(categoryNames);
+                        this.setListAdapter(adapter);
+                        */
+
+                        baseAdapter adapter = new baseAdapter(categoryNames, getContext());
+
                         this.setListAdapter(adapter);
                     }
                     break;
@@ -103,4 +110,5 @@ public class File_View_Fragement extends ListFragment {
             }
         }
     }
+
 }

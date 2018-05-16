@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BarberEric_AudioApp</string>
+    <string name="empty"></string>
 </resources>
