@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
+import com.example.barber223.barbereric_audioapp.Fragments.File_View_Fragement;
+import com.example.barber223.barbereric_audioapp.Fragments.RecordInformationFragment;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
@@ -24,7 +26,10 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
         setContentView(R.layout.activity_cloud_view);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.activity_selection_fragment_frame, Activity_Selection_Fragment_Top.newInstance()).commit();
+                .replace(R.id.activity_selection_fragment_frame, Activity_Selection_Fragment_Top.newInstance())
+                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance())
+                .replace(R.id.information_fragment_frame, RecordInformationFragment.newInstance())
+                .commit();
 
     }
 

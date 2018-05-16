@@ -43,6 +43,8 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         void record();
 
         void seekBarWasAltered(int _newPosition);
+
+
     }
 
     private PlayBackCommandListener mListener;
@@ -68,6 +70,7 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
             view.findViewById(R.id.track_notes).setOnClickListener(this);
             view.findViewById(R.id.track_information_edit_text).setOnClickListener(this);
             view.findViewById(R.id.record_btn).setOnClickListener(this);
+            view.findViewById(R.id.add_categoryButton).setOnClickListener(this);
         }
     }
 
@@ -102,6 +105,11 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
 
             case R.id.record_btn:
                 mListener.record();
+                break;
+
+            case R.id.add_categoryButton:
+                //this needs to pop an alert for adding a new category
+                mListener.newCategory();
                 break;
         }
     }
