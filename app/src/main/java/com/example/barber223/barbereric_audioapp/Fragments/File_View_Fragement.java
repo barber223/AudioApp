@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
@@ -67,48 +66,59 @@ public class File_View_Fragement extends ListFragment {
 
                case KeyClassHolder.action_file:
                    //this will need to pull the data from the users devices file system
+                   String[] categoryes = getListOfCategoryNames();
+                   if (categoryes != null){
+                       baseAdapter adapter = new baseAdapter(categoryes, getContext());
+                       this.setListAdapter(adapter);
+                   }
+                   //This will need the functionality for playing and viewing all of the files within a selected category
+
                 break;
 
                 case KeyClassHolder.action_record:
-                    //this will need to pull the data from the users devices file system
 
-                    //pull the categories from the device
-                    File[] files = mInfoListener.getcategoryList();
-
-                    if (files != null){
-                        String[] categoryNames = new String[files.length];
-                        //need to populate the list with a list adapter cycling through the different categories
-                        //This will allow me to only pull the categories for displaying
-                        int lastindexofChar = files[0].getAbsolutePath().lastIndexOf('/');
-                        String filePath = "";
-
-                        for (int i = 0; i < files.length; i ++){
-                            //All of the categories should have the same last index due to the directories of when they get saved
-                            //need to get the name of the category
-                            char[] path = files[i].getAbsolutePath().toCharArray();
-                            char[] catName = new char[(path.length - lastindexofChar) - 1];
-                            int indexOfCatName = 0;
-                            for (int l = lastindexofChar + 1; l < path.length; l ++){
-                                catName[indexOfCatName] = path[l];
-                                indexOfCatName ++;
-                            }
-                            String name = String.valueOf(catName);
-                            categoryNames[i] = name;
-                        }
-                        /*
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
-                        adapter.addAll(categoryNames);
-                        this.setListAdapter(adapter);
-                        */
-
-                        baseAdapter adapter = new baseAdapter(categoryNames, getContext());
-
+                    String[] catNames = getListOfCategoryNames();
+                    if (catNames != null){
+                        baseAdapter adapter = new baseAdapter(catNames, getContext());
                         this.setListAdapter(adapter);
                     }
+
                     break;
 
             }
         }
     }
+
+    private String[] getListOfCategoryNames(){
+        //this will need to pull the data from the users devices file system
+
+        //pull the categories from the device
+        File[] files = mInfoListener.getcategoryList();
+
+        if (files != null){
+            String[] categoryNames = new String[files.length];
+            //need to populate the list with a list adapter cycling through the different categories
+            //This will allow me to only pull the categories for displaying
+            int lastindexofChar = files[0].getAbsolutePath().lastIndexOf('/');
+            String filePath = "";
+
+            for (int i = 0; i < files.length; i ++){
+                //All of the categories should have the same last index due to the directories of when they get saved
+                //need to get the name of the category
+                char[] path = files[i].getAbsolutePath().toCharArray();
+                char[] catName = new char[(path.length - lastindexofChar) - 1];
+                int indexOfCatName = 0;
+                for (int l = lastindexofChar + 1; l < path.length; l ++){
+                    catName[indexOfCatName] = path[l];
+                    indexOfCatName ++;
+                }
+                String name = String.valueOf(catName);
+                categoryNames[i] = name;
+            }
+            return categoryNames;
+        }
+        return  null;
+    }
+
 
 }

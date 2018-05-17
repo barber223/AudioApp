@@ -14,7 +14,7 @@
             android:id="@+id/track_information_edit_text"
             android:layout_width="265dp"
             android:layout_height="wrap_content"
-            android:text="jekfhufuob"
+            android:text="@string/empty"
             />
 
         <ImageButton

@@ -201,4 +201,10 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
         return categoryFolder;
     }
+
+    @Override
+    public void forceReload() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+    }
 }
