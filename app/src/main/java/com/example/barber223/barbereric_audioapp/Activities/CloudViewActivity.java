@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.barber223.barbereric_audioapp.CommunicateCB;
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
 import com.example.barber223.barbereric_audioapp.Fragments.File_View_Fragement;
 import com.example.barber223.barbereric_audioapp.Fragments.RecordInformationFragment;
@@ -30,6 +31,8 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
                 .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance())
                 .replace(R.id.information_fragment_frame, RecordInformationFragment.newInstance())
                 .commit();
+
+        //communicate();
 
     }
 
@@ -56,5 +59,12 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     @Override
     public String getActiveProcess() {
         return activeDeviceProcess;
+    }
+
+    //Try to make contact
+    private void communicate(){
+        CommunicateCB cb = new CommunicateCB(this);
+
+        cb.execute("ohYeah!!!");
     }
 }

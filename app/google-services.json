@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "288477354574",
+    "firebase_url": "https://audioapp-e4691.firebaseio.com",
+    "project_id": "audioapp-e4691",
+    "storage_bucket": "audioapp-e4691.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288477354574:android:43f3a7e1930ece47",
+        "android_client_info": {
+          "package_name": "com.example.barber223.barbereric_audioapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288477354574-tmc76eq06dlkb42bfka0rm3kav9rrl38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.barber223.barbereric_audioapp",
+            "certificate_hash": "cad00b52795045f44b429d92b214ad1eb582c2ba"
+          }
+        },
+        {
+          "client_id": "288477354574-2kpfsqqu2v3s2rplp6v4fvlda4lfg42h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYtX7qzlnpa9Tg-JMEr5h_Ef4r87Mvvx4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288477354574-2kpfsqqu2v3s2rplp6v4fvlda4lfg42h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

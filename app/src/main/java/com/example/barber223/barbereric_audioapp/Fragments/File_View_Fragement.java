@@ -68,7 +68,7 @@ public class File_View_Fragement extends ListFragment {
                    //this will need to pull the data from the users devices file system
                    String[] categoryes = getListOfCategoryNames();
                    if (categoryes != null){
-                       baseAdapter adapter = new baseAdapter(categoryes, getContext());
+                       baseAdapter adapter = new baseAdapter(categoryes, getContext(), KeyClassHolder.action_file);
                        this.setListAdapter(adapter);
                    }
                    //This will need the functionality for playing and viewing all of the files within a selected category
@@ -79,7 +79,7 @@ public class File_View_Fragement extends ListFragment {
 
                     String[] catNames = getListOfCategoryNames();
                     if (catNames != null){
-                        baseAdapter adapter = new baseAdapter(catNames, getContext());
+                        baseAdapter adapter = new baseAdapter(catNames, getContext(), KeyClassHolder.action_record);
                         this.setListAdapter(adapter);
                     }
 
