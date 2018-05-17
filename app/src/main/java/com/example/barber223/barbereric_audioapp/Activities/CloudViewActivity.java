@@ -42,16 +42,18 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
         //need to load the new activity
         switch (_action){
-            case KeyClassHolder.action_cloud:
+            case KeyClassHolder.action_file:
                 Intent newActivity = new Intent(this, FileViewActivity.class);
                 newActivity.setAction(KeyClassHolder.action_file);
                 startActivity(newActivity);
+                this.finish();
                 break;
 
             case KeyClassHolder.action_record:
                 newActivity = new Intent(this, RecordMainActivity.class);
                 newActivity.setAction(KeyClassHolder.action_record);
                 startActivity(newActivity);
+                this.finish();
                 break;
         }
     }

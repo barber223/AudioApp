@@ -50,12 +50,14 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
                 Intent newActivity = new Intent(this, CloudViewActivity.class);
                 newActivity.setAction(KeyClassHolder.action_cloud);
                 startActivity(newActivity);
+                this.finish();
                 break;
 
             case KeyClassHolder.action_record:
                 newActivity = new Intent(this, RecordMainActivity.class);
                 newActivity.setAction(KeyClassHolder.action_record);
                 startActivity(newActivity);
+                this.finish();
                 break;
         }
         //This allows navigation between all of the activities and processes within the application
