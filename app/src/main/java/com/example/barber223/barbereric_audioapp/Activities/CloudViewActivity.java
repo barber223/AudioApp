@@ -32,7 +32,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
                 .replace(R.id.information_fragment_frame, RecordInformationFragment.newInstance())
                 .commit();
 
-        //communicate();
+        communicate();
 
     }
 

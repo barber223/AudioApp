@@ -95,37 +95,39 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
     @Override
     public void onClick(View v) {
-        final int position = (Integer) v.getTag();
-        final String catName = mStrings[position];
 
-                // now that I have the value of which object was selected
-                // I need the ability to select the delete button option with the use of the alert dialog builder
-                File pStorage = mContext.getExternalFilesDir(null);
-                final File categoriesFolder = new File(pStorage, "AudioFiles");
+            final int position = (Integer) v.getTag();
+            final String catName = mStrings[position];
 
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-                builder.setTitle("Are you sure?");
-                builder.setMessage("If you delete this category all of files within this category will be deleted"
-                        + "\n Category: " + mStrings[position]
-                );
+            // now that I have the value of which object was selected
+            // I need the ability to select the delete button option with the use of the alert dialog builder
+            File pStorage = mContext.getExternalFilesDir(null);
+            final File categoriesFolder = new File(pStorage, "AudioFiles");
 
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        File fileToDelete = new File(categoriesFolder, catName);
-                        //delete the file from the system
-                        fileToDelete.delete();
-                        //Need to force reload all of the information within the file system being displayed
-                        mListener.forceReload();
-                    }
-                });
-                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
+            builder.setTitle("Are you sure?");
+            builder.setMessage("If you delete this category all of files within this category will be deleted"
+                    + "\n Category: " + mStrings[position]
+            );
+
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    File fileToDelete = new File(categoriesFolder, catName);
+                    //delete the file from the system
+                    fileToDelete.delete();
+                    //Need to force reload all of the information within the file system being displayed
+                    mListener.forceReload();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+
     }
 
     @Override

@@ -291,7 +291,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
                     File newTrack = new File(directory, activeTitle);
 
                     mRSC.Record(newTrack.getAbsolutePath());
-                    
+
 
                 }catch (Exception e){
                     e.printStackTrace();

@@ -119,9 +119,10 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
     }
 
     @Override
-    public void record() {
+    public void record(String _title) {
 
     }
+
 
     @Override
     public void seekBarWasAltered(int _newPosition) {

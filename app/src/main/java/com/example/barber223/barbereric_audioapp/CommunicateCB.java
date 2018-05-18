@@ -2,22 +2,37 @@ package com.example.barber223.barbereric_audioapp;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.storage.StorageManager;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 public class CommunicateCB extends AsyncTask<String, String, String>{
 
@@ -31,55 +46,58 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
         mContext = _context;
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("test", ".mp3");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://audio_app_a");
-
-        mStorageRef = storage.getReference();
-
-        String bucketString = mStorageRef.getBucket();
-
-        String path = mStorageRef.getPath();
+        StorageReference storage = mStorageRef.child("Music").child("Beats").child("Bill-Bailey-Wont-You-Please-Come-Home_FULL_WSR1802001.mp3");
 
 
-       String[] fileList = new File (path).list();
+        final File finalLocalFile = localFile;
+        StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = storage.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Boolean b = finalLocalFile.canRead();
 
-        if (fileList != null){
-            for (String thing: fileList){
-                Log.i("Communicate Thing: ", thing);
+                if (b) {
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(finalLocalFile.getAbsolutePath());
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    private void digInFile(File file){
+        if (file != null){
+            File[] cats = file.listFiles();
+            if (cats.length > 0){
+
+                for (File mFile:cats){
+                    Log.i("FilesPulled: ", " FilePath: " + mFile.getAbsolutePath() + "n");
+                }
+
+            }else{
+
+                Log.i("jf", "This didn't work");
             }
         }
-
-
-        Log.i("CommunicatCB: ", bucketString);
-
-
-        //Upload a file
-        /*
-        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-StorageReference riversRef = storageRef.child("images/rivers.jpg");
-
-riversRef.putFile(file)
-    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-        @Override
-        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            // Get a URL to the uploaded content
-            Uri downloadUrl = taskSnapshot.getDownloadUrl();
-        }
-    })
-    .addOnFailureListener(new OnFailureListener() {
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            // Handle unsuccessful uploads
-            // ...
-        }
-    });
-         */
-
-        //Download a file
-        /*
-
-         */
-
     }
 
 

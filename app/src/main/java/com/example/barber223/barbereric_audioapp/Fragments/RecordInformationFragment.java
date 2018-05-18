@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.barber223.barbereric_audioapp.R;
 
@@ -115,6 +116,8 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
                 // the values within the edit text
                 if (eT != null && !eT.getText().toString().trim().equals("") ){
                     mListener.record(eT.getText().toString());
+                }else{
+                    Toast.makeText(getContext(), "There please add Title", Toast.LENGTH_SHORT).show();
                 }
 
 
