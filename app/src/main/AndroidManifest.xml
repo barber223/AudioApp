@@ -39,6 +39,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Activities.RecordMainActivity$AlertSpinnerAcitivty"/>
+
         <service android:name=".Services.CloudStorage_Service" />
         <service android:name=".Services.DataDeviceMediaLoader" />
         <service android:name=".Services.DataCloudPushService" />

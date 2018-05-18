@@ -51,7 +51,7 @@ public class MediaRecorderServiceClass extends Service implements AudioRouting,M
         }
     }
 
-    private void Record(String pathForSave) {
+    public void Record(String pathForSave) {
         if (mState == STATE_INITIALIZED) {
             //for now will use a template and change when the user selects save:)
             mMediaRecorder.setOutputFile(pathForSave);
@@ -74,7 +74,7 @@ public class MediaRecorderServiceClass extends Service implements AudioRouting,M
 
     }
 
-    private void stopRecording(){
+    public void stopRecording(){
         if (mState == STATE_RECORDING){
             mMediaRecorder.stop();
             //There is data available

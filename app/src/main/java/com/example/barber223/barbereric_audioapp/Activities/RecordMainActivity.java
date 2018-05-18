@@ -10,17 +10,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,7 @@ import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
+import com.example.barber223.barbereric_audioapp.Services.MediaRecorderServiceClass;
 
 import java.io.File;
 
@@ -42,6 +47,9 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     private String activeDeviceProcess = KeyClassHolder.action_record;
 
     private File[] categoryFolder;
+
+    String catOfRecord = "";
+    String activeTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +163,8 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
     @Override
     public void record(String _title) {
+        activeTitle = _title;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -174,7 +184,33 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
         //need to set up the spinner within the view
 
         //This will be used within the pulling of the categories that is also within the file_ViewFragment
-        
+        final String[] catNames = getListOfCategoryNames();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1
+                );
+
+        adapter.addAll(catNames);
+
+        final Spinner spinner = view.findViewById(R.id.category_spinner);
+
+        spinner.setAdapter(adapter);
+        spinner.setTag("1");
+
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (view.getTag().toString().equals("1")){
+                    //Need to check the position based off of the position of the spinner
+                    for (String name: catNames){
+                        if (name.equals(spinner.getItemAtPosition(position).toString())){
+                            //they have the same
+                           catOfRecord = (String)spinner.getItemAtPosition(position);
+                        }
+                    }
+                }
+            }
+        });
 
 
     }
@@ -240,23 +276,68 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
     @Override
     public void onClick(View v) {
+        //This can get called from the record alert
+        if (v.getId() == R.id.continue_to_record_button){
+            if (!catOfRecord.equals("")){
+                MediaRecorderServiceClass mRSC = new MediaRecorderServiceClass();
+                File pStorage = getExternalFilesDir(null);
+                File catFolder = new File(pStorage, "AudioFiles");
 
-    }
+                try{
+                    File directory = new File(catFolder, catOfRecord);
+                    // We are now within the file
+                    directory.mkdir();
 
-    public class AlertSpinnerAcitivty extends Activity implements AdapterView.OnItemSelectedListener{
+                    File newTrack = new File(directory, activeTitle);
 
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String parentTag = parent.getTag().toString();
-            if (parentTag.equals("1")){
-                //need acess to the avaiable category list to determine positions
+                    mRSC.Record(newTrack.getAbsolutePath());
+                    
 
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                mRSC.Record("");
+
+            }else{
+                Log.i("RecordMain: ", "Dont do anything there is no category");
             }
         }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
+        else{
+            Log.i("RecordMain: ", "Dont do anything there is no category");
         }
+    }
+
+
+
+    private String[] getListOfCategoryNames(){
+        //this will need to pull the data from the users devices file system
+
+        //pull the categories from the device
+        File[] files = getcategoryList();
+
+        if (files != null){
+            String[] categoryNames = new String[files.length];
+            //need to populate the list with a list adapter cycling through the different categories
+            //This will allow me to only pull the categories for displaying
+            int lastindexofChar = files[0].getAbsolutePath().lastIndexOf('/');
+            String filePath = "";
+
+            for (int i = 0; i < files.length; i ++){
+                //All of the categories should have the same last index due to the directories of when they get saved
+                //need to get the name of the category
+                char[] path = files[i].getAbsolutePath().toCharArray();
+                char[] catName = new char[(path.length - lastindexofChar) - 1];
+                int indexOfCatName = 0;
+                for (int l = lastindexofChar + 1; l < path.length; l ++){
+                    catName[indexOfCatName] = path[l];
+                    indexOfCatName ++;
+                }
+                String name = String.valueOf(catName);
+                categoryNames[i] = name;
+            }
+            return categoryNames;
+        }
+        return  null;
     }
 }
