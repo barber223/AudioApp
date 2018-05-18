@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
@@ -16,7 +17,7 @@ import com.example.barber223.barbereric_audioapp.baseAdapter;
 
 import java.io.File;
 
-public class File_View_Fragement extends ListFragment {
+public class File_View_Fragement extends ListFragment  {
 
     //need a listener to see if were pulling from the cloud or the file system
     private SelectionFragmentInterface mListener;
@@ -47,7 +48,6 @@ public class File_View_Fragement extends ListFragment {
             mInfoListener = (InformationInterface) context;
         }
     }
-
     //need a way for 3 different views within for data
 
     @Override
@@ -84,7 +84,6 @@ public class File_View_Fragement extends ListFragment {
                     }
 
                     break;
-
             }
         }
     }
@@ -119,6 +118,5 @@ public class File_View_Fragement extends ListFragment {
         }
         return  null;
     }
-
 
 }

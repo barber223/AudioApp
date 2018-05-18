@@ -9,4 +9,6 @@
 
     <color name="selected_menu_textAccent">#fffefe</color>
 
+    <color name="selectedCategory">#262626</color>
+
 </resources>

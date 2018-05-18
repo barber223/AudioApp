@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 
 import java.io.File;
+
+import static com.example.barber223.barbereric_audioapp.R.color.selectedCategory;
 
 public class baseAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener{
 
@@ -21,6 +24,8 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
     private InformationInterface mListener;
 
     private String mActiveProcess;
+
+    private int currentHighlightedPosition = -1;
 
     final int base_Id = 0x01010;
 
@@ -65,8 +70,6 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
         ViewHolder holder;
 
-
-
         if (convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.base_adapter_view, parent, false);
             holder = new ViewHolder();
@@ -80,7 +83,6 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
         setClickListener(holder.deleteButton);
 
         holder.textView.setText(mStrings[position]);
-
         holder.deleteButton.setTag(position);
 
         return convertView;
@@ -93,40 +95,37 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
     @Override
     public void onClick(View v) {
-
         final int position = (Integer) v.getTag();
-
-        // now that I have the value of which object was selected
-        // I need the ability to select the delete button option with the use of the alert dialog builder
-
         final String catName = mStrings[position];
 
-        File pStorage = mContext.getExternalFilesDir(null);
-        final File categoriesFolder = new File(pStorage, "AudioFiles");
+                // now that I have the value of which object was selected
+                // I need the ability to select the delete button option with the use of the alert dialog builder
+                File pStorage = mContext.getExternalFilesDir(null);
+                final File categoriesFolder = new File(pStorage, "AudioFiles");
 
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-        builder.setTitle("Are you sure?");
-        builder.setMessage("If you delete this category all of files within this category will be deleted"
-         + "\n Category: " + mStrings[position]
-        );
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
+                builder.setTitle("Are you sure?");
+                builder.setMessage("If you delete this category all of files within this category will be deleted"
+                        + "\n Category: " + mStrings[position]
+                );
 
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                  File fileToDelete = new File(categoriesFolder, catName);
-                  //delete the file from the system
-                fileToDelete.delete();
-                //Need to force reload all of the information within the file system being displayed
-                mListener.forceReload();
-            }
-        });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File fileToDelete = new File(categoriesFolder, catName);
+                        //delete the file from the system
+                        fileToDelete.delete();
+                        //Need to force reload all of the information within the file system being displayed
+                        mListener.forceReload();
+                    }
+                });
+                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
     }
 
     @Override
@@ -161,6 +160,8 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
         return true;
     }
+
+
 
     public class ViewHolder{
      TextView textView;

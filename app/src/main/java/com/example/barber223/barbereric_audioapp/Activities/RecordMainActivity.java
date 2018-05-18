@@ -5,6 +5,7 @@
 package com.example.barber223.barbereric_audioapp.Activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +15,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
@@ -28,7 +35,7 @@ import com.example.barber223.barbereric_audioapp.R;
 import java.io.File;
 
 public class RecordMainActivity extends AppCompatActivity implements SelectionFragmentInterface,
-        RecordInformationFragment.PlayBackCommandListener, InformationInterface{
+        RecordInformationFragment.PlayBackCommandListener, InformationInterface, View.OnClickListener{
 
     String newCategoryText = "";
 
@@ -147,9 +154,31 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     }
 
     @Override
-    public void record() {
+    public void record(String _title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.custom_record_alert_layout, null);
+
+        builder.setView(view);
+
+        TextView title = view.findViewById(R.id.title_of_track_text);
+        title.setText(_title);
+
+        Button _button = view.findViewById(R.id.cancel_button);
+        _button.setOnClickListener(this);
+
+        _button = view.findViewById(R.id.continue_to_record_button);
+        _button.setOnClickListener(this);
+
+        //need to set up the spinner within the view
+
+        //This will be used within the pulling of the categories that is also within the file_ViewFragment
+        
+
 
     }
+
 
     @Override
     public void seekBarWasAltered(int _newPosition) {
@@ -206,5 +235,28 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     public void forceReload() {
         getFragmentManager().beginTransaction()
                 .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public class AlertSpinnerAcitivty extends Activity implements AdapterView.OnItemSelectedListener{
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String parentTag = parent.getTag().toString();
+            if (parentTag.equals("1")){
+                //need acess to the avaiable category list to determine positions
+
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
     }
 }

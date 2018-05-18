@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.barber223.barbereric_audioapp.R;
 
@@ -40,10 +41,9 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
 
         void newCategory();
 
-        void record();
+        void record(String _title);
 
         void seekBarWasAltered(int _newPosition);
-
 
     }
 
@@ -104,7 +104,20 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
                 break;
 
             case R.id.record_btn:
-                mListener.record();
+                //need to set up a way to specify the file location before the recording process has begun
+                EditText eT = null;
+                try {
+                     eT = getView().findViewById(R.id.track_information_edit_text);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                //This will only allow the user to even think about starting to record without setting
+                // the values within the edit text
+                if (eT != null && !eT.getText().toString().trim().equals("") ){
+                    mListener.record(eT.getText().toString());
+                }
+
+
                 break;
 
             case R.id.add_categoryButton:
