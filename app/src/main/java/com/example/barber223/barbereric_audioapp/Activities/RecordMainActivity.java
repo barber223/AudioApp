@@ -51,6 +51,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     String catOfRecord = "";
     String activeTitle = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,6 +198,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
         spinner.setAdapter(adapter);
         spinner.setTag("1");
 
+        /*
         spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -211,6 +213,15 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
                 }
             }
         });
+        */
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
 
 
     }
@@ -305,6 +316,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
         }
         else{
             Log.i("RecordMain: ", "Dont do anything there is no category");
+
         }
     }
 

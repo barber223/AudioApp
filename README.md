@@ -2,7 +2,11 @@
 
 #setUp
 - download sdk
-- run ui, no functionality is active but layout has been worked on
+- run ui
+- Can add file categories 
+- can delete cat files
+- can start working through the starting of the recording process
+- can open the cloud and listen to a basic file (No Working Buttons)
 
 # Summary
 
