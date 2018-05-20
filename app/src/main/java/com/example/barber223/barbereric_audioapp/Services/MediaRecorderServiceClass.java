@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioDeviceInfo;
 import android.media.AudioRouting;
 import android.media.MediaRecorder;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -14,11 +15,11 @@ import java.io.IOException;
 public class MediaRecorderServiceClass extends Service implements AudioRouting,MediaRecorder.OnInfoListener {
 
     //need the states of the mediaRecorder
-    private static final int STATE_INITIAL = 0;
-    private static final int STATE_ERROR = -1;
+    public static final int STATE_INITIAL = 0;
+    public static final int STATE_ERROR = -1;
     private static final int STATE_RELEASED = 1;
     private static final int STATE_INITIALIZED = 2;
-    private static final int STATE_RECORDING = 3;
+    public static final int STATE_RECORDING = 3;
     private static final int STATE_DATASOURCECONFIG = 4;
     private static final int STATE_PREPARED = 5;
     private static final int STATE_STOPED_WIDDATA = 6;
@@ -74,6 +75,9 @@ public class MediaRecorderServiceClass extends Service implements AudioRouting,M
         }
 
     }
+    public int getCurrentStat(){
+        return mState;
+    }
 
     public void stopRecording(){
         if (mState == STATE_RECORDING){
@@ -94,11 +98,14 @@ public class MediaRecorderServiceClass extends Service implements AudioRouting,M
     }
 
 
+    class MediaRecorderBinder extends Binder {
+        MediaRecorderServiceClass getService() {return MediaRecorderServiceClass.this;}
+    }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new MediaRecorderBinder();
     }
 
     @Override

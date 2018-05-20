@@ -51,6 +51,8 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     String catOfRecord = "";
     String activeTitle = "";
 
+    MediaRecorderServiceClass mRSC;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,66 +166,76 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
     @Override
     public void record(String _title) {
-        activeTitle = _title;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (mRSC != null){
+            int state = mRSC.getCurrentStat();
 
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.custom_record_alert_layout, null);
+            Log.i("g", "g");
 
-        builder.setView(view);
 
-        TextView title = view.findViewById(R.id.title_of_track_text);
-        title.setText(_title);
-
-        Button _button = view.findViewById(R.id.cancel_button);
-        //_button.setOnClickListener(this);
-
-        _button = view.findViewById(R.id.continue_to_record_button);
-        //_button.setOnClickListener(this);
-
-        //need to set up the spinner within the view
-
-        //This will be used within the pulling of the categories that is also within the file_ViewFragment
-        final String[] catNames = getListOfCategoryNames();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1
-                );
-
-        adapter.addAll(catNames);
-
-        ListView lV = view.findViewById(R.id.categoryList);
-
-        if (lV != null) {
-            lV.setAdapter(adapter);
-            //need to set up the on item selected override for when a user selects a category they would like
-            //the new audio recording to be added to
-            lV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //Maybe this will work. I need to have a variable /action for the to continue the process
-                    Log.i("AlertDialog", "A view has been hit, need to save the view cat that was selecvted");
-                    if (catNames != null) {
-                        catOfRecord = catNames[position];
-                    }else{
-                        Toast.makeText(getApplicationContext(),
-                                "There is no categories to select from\nAdd one using plus button.",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
         }
 
+        if (mRSC != null && mRSC.getCurrentStat() == MediaRecorderServiceClass.STATE_RECORDING){
+            //need to suspent the recording process
+            mRSC.stopRecording();
+
+        }else {
+            activeTitle = _title;
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.custom_record_alert_layout, null);
+
+            builder.setView(view);
+
+            TextView title = view.findViewById(R.id.title_of_track_text);
+            title.setText(_title);
+
+            Button _button = view.findViewById(R.id.cancel_button);
+            //_button.setOnClickListener(this);
+
+            _button = view.findViewById(R.id.continue_to_record_button);
+            _button.setOnClickListener(this);
+
+            //need to set up the spinner within the view
+
+            //This will be used within the pulling of the categories that is also within the file_ViewFragment
+            final String[] catNames = getListOfCategoryNames();
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1
+            );
+
+            adapter.addAll(catNames);
+
+            ListView lV = view.findViewById(R.id.categoryList);
+
+            if (lV != null) {
+                lV.setAdapter(adapter);
+                //need to set up the on item selected override for when a user selects a category they would like
+                //the new audio recording to be added to
+                lV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //Maybe this will work. I need to have a variable /action for the to continue the process
+                        Log.i("AlertDialog", "A view has been hit, need to save the view cat that was selected");
+                        if (catNames != null) {
+                            catOfRecord = catNames[position];
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "There is no categories to select from\nAdd one using plus button.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
 
 
-        builder.setNeutralButton("Cancel", this);
-        builder.setPositiveButton("Proceed to record", this);
-
-
-
-
-        builder.show();
+            builder.setNeutralButton("Cancel", this);
+            builder.setPositiveButton("Proceed to record", this);
+            builder.show();
+        }
     }
 
 
@@ -284,12 +296,15 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     }
 
 
+    //This is for the alert dialog
     @Override
     public void onClick(View v) {
         //This can get called from the record alert
         if (v.getId() == R.id.continue_to_record_button){
+
             if (!catOfRecord.equals("")){
-                MediaRecorderServiceClass mRSC = new MediaRecorderServiceClass();
+                mRSC = new MediaRecorderServiceClass();
+
                 File pStorage = getExternalFilesDir(null);
                 File catFolder = new File(pStorage, "AudioFiles");
 
@@ -299,6 +314,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
                     directory.mkdir();
 
                     File newTrack = new File(directory, activeTitle);
+                    //newTrack.createNewFile();
                     mRSC.Record(newTrack.getAbsolutePath());
 
                     //Need to set up the media recorder before starting the recording process
@@ -357,44 +373,42 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     public void onClick(DialogInterface dialog, int which) {
        switch (which){
            case -1:
-            if (!catOfRecord.equals("")){
-                MediaRecorderServiceClass mRSC = new MediaRecorderServiceClass();
-                File pStorage = getExternalFilesDir(null);
-                File catFolder = new File(pStorage, "AudioFiles");
-
-                try{
-                    File directory = new File(catFolder, catOfRecord);
-                    // We are now within the file
-                    directory.mkdir();
-
-                    File newTrack = new File(directory, activeTitle);
-                    //Need to create the file
-                    newTrack.createNewFile();
-                    mRSC.Record(newTrack.getAbsolutePath());
-
-                    //Need to set up the media recorder before starting the recording process
-                    mRSC.prepareMediaRecorder();
-
-                    //So if it hits this point I should be all ok to start the recording process
-                    //Need to pass in the file path for the new recording to be saved to
-                    mRSC.Record(newTrack.getAbsolutePath());
-                    dialog.cancel();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }else{
-                Log.i("RecordMain: ", "Dont do anything there is no category");
+            if (!catOfRecord.equals("")) {
+                dialog.cancel();
+            startRecording();
             }
             break;
 
            case -3:
                dialog.cancel();
                break;
+        }
+    }
+    private void startRecording(){
 
+        mRSC = new MediaRecorderServiceClass();
 
+        File pStorage = getExternalFilesDir(null);
+        File catFolder = new File(pStorage, "AudioFiles");
 
+        try{
+            File directory = new File(catFolder, catOfRecord);
+            // We are now within the file
+            directory.mkdir();
 
+            File newTrack = new File(directory, activeTitle);
 
+            //newTrack.createNewFile();
+            mRSC.Record(newTrack.getAbsolutePath());
+
+            //Need to set up the media recorder before starting the recording process
+            mRSC.prepareMediaRecorder();
+
+            //So if it hits this point I should be all ok to start the recording process
+            //Need to pass in the file path for the new recording to be saved to
+            mRSC.Record(newTrack.getAbsolutePath());
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
