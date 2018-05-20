@@ -5,21 +5,30 @@
 package com.example.barber223.barbereric_audioapp.Activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.example.barber223.barbereric_audioapp.CommunicateCB;
+import com.example.barber223.barbereric_audioapp.AudioFileObject;
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
 import com.example.barber223.barbereric_audioapp.Fragments.File_View_Fragement;
 import com.example.barber223.barbereric_audioapp.Fragments.RecordInformationFragment;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class CloudViewActivity extends AppCompatActivity implements SelectionFragmentInterface {
+   private String activeDeviceProcess = KeyClassHolder.action_cloud;
 
-    private String activeDeviceProcess = KeyClassHolder.action_cloud;
-
+    private ArrayList<String> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +50,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
         activeDeviceProcess = _action;
 
         //need to load the new activity
-        switch (_action){
+        switch (_action) {
             case KeyClassHolder.action_file:
                 Intent newActivity = new Intent(this, FileViewActivity.class);
                 newActivity.setAction(KeyClassHolder.action_file);
@@ -64,9 +73,15 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     }
 
     //Try to make contact
-    private void communicate(){
-        CommunicateCB cb = new CommunicateCB(this);
+    private void communicate() {
+        // CommunicateCB cb = new CommunicateCB(this);
 
-        cb.execute("ohYeah!!!");
+        //cb.execute("ohYeah!!!");
+
+
+
     }
+
 }
+
+

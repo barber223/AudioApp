@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,8 +45,11 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     private StorageReference mStorageRef;
 
+    private ArrayList<String> categories;
 
 
+
+    //This method is used to pull audio file base TODO:// work through this methos and subregate
     public CommunicateCB (Context _context){
         mContext = _context;
 
@@ -84,6 +92,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     }
 
+    //doesnt do anything
     private void digInFile(File file){
         if (file != null){
             File[] cats = file.listFiles();
@@ -104,38 +113,57 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     @Override
     protected String doInBackground(String... strings) {
+        if (strings != null) {
 
-        try{
+            switch (strings[0]) {
+                case KeyClassHolder.key_action_pullCats:
+                    //this will be used to pull all of the categories within the database
+                    DatabaseReference mDBRef;
 
-            AssetManager am = mContext.getAssets();
+                    mDBRef = FirebaseDatabase.getInstance().getReference();
+                    final DatabaseReference categorys = mDBRef.child("Audio");
+                    mDBRef.orderByChild("Audio").addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.i("SnapShot:", "\n " + dataSnapshot.toString());
+                            Iterable<DataSnapshot> files = dataSnapshot.getChildren();
+                            categories = new ArrayList<String>();
+                            for (DataSnapshot shot: files){
+                                Log.i("looping: Shot" , "\n " + shot.toString());
+                                //pull all of the keys and add them to a list to populate the categories within the list
+                                String key = shot.getKey();
+                                categories.add(key);
+                            }
+                        }
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            String StorageUrl = "https://console.cloud.google.com/storage/browser/audio_app_a";
+                        }
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            InputStream is = new URL(StorageUrl).openStream();
+                        }
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            //InputStream is = am.open(url);
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-            //InputStream is = FileUtils
+                        }
 
-            File file = new File("android/com/temp/storage/");
+                    });
+                    break;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Files.copy(
-                  is,
-                  file.toPath(),
-                        StandardCopyOption.REPLACE_EXISTING
-                );
+                case ";":
+
+                    break;
+                default:
+                    break;
             }
-            else{
-                Toast.makeText(mContext, "Get a new Phone", Toast.LENGTH_LONG).show();
-            }
-
-            is.close();
-
-
-        }catch (Exception E){
-            E.printStackTrace();
         }
+
+
 
 
         return "Hekki";

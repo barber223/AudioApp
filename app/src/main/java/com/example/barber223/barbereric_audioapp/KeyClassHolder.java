@@ -13,4 +13,6 @@ public class KeyClassHolder {
 
     private static final String KEY_holder = "";
 
+    public static final String key_action_pullCats = "Categories";
+
 }
