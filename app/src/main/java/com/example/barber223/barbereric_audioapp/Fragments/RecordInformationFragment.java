@@ -2,12 +2,14 @@ package com.example.barber223.barbereric_audioapp.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.barber223.barbereric_audioapp.R;
@@ -46,6 +48,15 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
 
         void seekBarWasAltered(int _newPosition);
 
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (view != null){
+            ImageButton iB = view.findViewById(R.id.record_btn);
+
+        }
     }
 
     private PlayBackCommandListener mListener;

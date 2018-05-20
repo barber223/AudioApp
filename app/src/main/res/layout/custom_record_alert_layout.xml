@@ -18,11 +18,12 @@
         android:layout_height="wrap_content"
         android:text="@string/empty"/>
 
-    <Spinner
-        android:id="@+id/category_spinner"
+    <ListView
+        android:id="@+id/categoryList"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        />
+        android:layout_height="200dp">
+
+    </ListView>
 
     <Button
         android:id="@+id/cancel_button"

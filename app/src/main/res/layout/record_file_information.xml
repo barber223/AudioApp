@@ -100,9 +100,10 @@
 
             <ImageButton
                 android:id="@+id/record_btn"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@drawable/record_iconpng_01"
+                android:background="@xml/couner_radius"
                 />
 
 

@@ -31,8 +31,9 @@ public class MediaRecorderServiceClass extends Service implements AudioRouting,M
     @Override
     public void onCreate() {
         super.onCreate();
+    }
 
-
+    public void prepareMediaRecorder(){
         mMediaRecorder = new MediaRecorder();
         mState = STATE_INITIAL;
 
