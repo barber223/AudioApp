@@ -8,7 +8,9 @@ public class KeyClassHolder {
 
     //File Processes.java (FileViewActivity.java)
     public static final String action_file = "android.intent.action.file_view";
+
     public static final String action_cloud = "android.intent.action.cloud_view";
+    public static final String action_cloud_tracks = "android.intent.action";
     public static final String action_record = "android.intent.action.record_view";
 
     private static final String KEY_holder = "";

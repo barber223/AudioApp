@@ -32,8 +32,10 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 {
 
     private String activeDeviceProcess = KeyClassHolder.action_cloud;
+    private String activeDBProcess = KeyClassHolder.key_action_pullCats;
 
     private ArrayList<String> categories;
+    private ArrayList<AudioFileObject> mTracks;
 
     private CommunicateCB cb;
 
@@ -50,10 +52,11 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
                 .replace(R.id.information_fragment_frame, RecordInformationFragment.newInstance())
                 .commit();
 
+        //TODO need to remember to reset this value if the user would like to go back to catergories menu
+        mTracks = new ArrayList<>();
+
         cb = new CommunicateCB(this);
         pullCategoies();
-
-        communicate();
 
     }
 
@@ -81,7 +84,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     @Override
     public String getActiveProcess() {
-        return activeDeviceProcess;
+        return activeDBProcess;
     }
 
     @Override
@@ -92,19 +95,8 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     private void pullCategoies(){
         cb.execute(KeyClassHolder.key_action_pullCats);
+        activeDBProcess = KeyClassHolder.key_action_pullCats;
     }
-
-
-    //Try to make contact
-    private void communicate() {
-        // CommunicateCB cb = new CommunicateCB(this);
-
-        //cb.execute("ohYeah!!!");
-
-
-
-    }
-
 
     @Override
     public void returnOfCategories(ArrayList<String> _categories) {
@@ -130,6 +122,19 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
         desiredCategory = _activeCategory;
         cb = new CommunicateCB(this);
         cb.execute(KeyClassHolder.key_action_pullTrackList);
+
+    }
+
+    @Override
+    public void passNewAudioObject(AudioFileObject _obj) {
+
+        mTracks.add(_obj);
+        //need to set the active process
+        activeDBProcess = KeyClassHolder.key_action_pullTrackList;
+
+        //need to reset the fragment
+        getFragmentManager().beginTransaction()
+                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
 
     }
 }

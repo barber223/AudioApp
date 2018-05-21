@@ -50,7 +50,9 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     private cloudInformationInterface mListener;
 
-    ArrayList<AudioFileObject> audioTracksInformation = new ArrayList<>();
+    private AudioFileObject mAudioTracksInformation;
+
+    private String mTaskToPerform;
 
 
 
@@ -129,6 +131,8 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
         if (strings != null) {
             DatabaseReference mDBRef;
 
+            mTaskToPerform = strings[0];
+
             switch (strings[0]) {
                 case KeyClassHolder.key_action_pullCats:
                     //this will be used to pull all of the categories within the database
@@ -193,8 +197,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
                                 Iterable<DataSnapshot> files = dataSnapshot.getChildren();
 
-                                audioTracksInformation.add(0, new AudioFileObject("", "", ""));
-                                AudioFileObject obj = audioTracksInformation.get(0);
+                                mAudioTracksInformation =  new AudioFileObject("", "", "");
 
                                 for (DataSnapshot shot : files) {
                                     try {
@@ -202,15 +205,15 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                         switch (tempValue) {
 
                                             case "Author":
-                                                obj.setAuthor(shot.getValue().toString());
+                                                mAudioTracksInformation.setAuthor(shot.getValue().toString());
                                                 break;
 
                                             case "Location":
-                                                obj.setFilePath(shot.getValue().toString());
+                                                mAudioTracksInformation.setFilePath(shot.getValue().toString());
                                                 break;
 
                                             case "Title":
-                                                obj.setName(shot.getValue().toString());
+                                                mAudioTracksInformation.setName(shot.getValue().toString());
                                                 break;
 
                                             default:
@@ -222,7 +225,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                 }//iterating through track information
                                 //need to send out that there is a new track within the file system
                                 //or send back a the new audio object
-                                
+                                onPostExecute("hello");
                             }
                             @Override
                             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -264,8 +267,14 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        if (categories != null && mListener != null){
+        if (categories != null && mListener != null) {
             mListener.returnOfCategories(categories);
         }
+        else if (mAudioTracksInformation != null && mListener != null){
+            mListener.passNewAudioObject(mAudioTracksInformation);
+        }
     }
+
+
+
 }

@@ -78,7 +78,7 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
         if (mListener != null){
             switch (mListener.getActiveProcess()){
 
-                case KeyClassHolder.action_cloud:
+                case KeyClassHolder.key_action_pullCats:
 
                    //This will need to pull the data from the cloud bucket
                    //need to obatin the list of categories from the cloud activity if it is not null :)
@@ -100,16 +100,17 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                     }
                     //Thgis will only get selectded whent there is the items from the cloud becauser only in the cloud
                     //view users will be able to select the category
-
-
-
                 break;
+
+                case KeyClassHolder.key_action_pullTrackList:
+                    //Load the same as cat but with cats and a little bit of seprate functionality;
+                    //TODO finish this to allow the tracks to be displayed
+                    break;
 
                case KeyClassHolder.action_file:
                    //this will need to pull the data from the users devices file system
                    String[] categoryes = getListOfCategoryNames();
-                   if (categoryes != null){
-                       baseAdapter adapter = new baseAdapter(categoryes, getContext(), KeyClassHolder.action_file);
+                   if (categoryes != null){ baseAdapter adapter = new baseAdapter(categoryes, getContext(), KeyClassHolder.action_file);
                        this.setListAdapter(adapter);
                    }
                    //This will need the functionality for playing and viewing all of the files within a selected category
