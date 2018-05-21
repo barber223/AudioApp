@@ -50,6 +50,8 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     private cloudInformationInterface mListener;
 
+    ArrayList<AudioFileObject> audioTracksInformation = new ArrayList<>();
+
 
 
     //This method is used to pull audio file base TODO:// work through this methos and subregate
@@ -182,15 +184,46 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                        // final DatabaseReference categorys = mDBRef.child("Audio");
 
 
-                        mDBRef.orderByChild("Audio/"+desiredCategory).addChildEventListener(new ChildEventListener() {
+
+
+                        mDBRef.child("Audio").child(desiredCategory)
+                                .addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                Log.i("Well Shit:", "There is somthing here@!");
 
-                                //it calls YAY
+                                Iterable<DataSnapshot> files = dataSnapshot.getChildren();
+
+                                audioTracksInformation.add(0, new AudioFileObject("", "", ""));
+                                AudioFileObject obj = audioTracksInformation.get(0);
+
+                                for (DataSnapshot shot : files) {
+                                    try {
+                                        String tempValue = shot.getKey();
+                                        switch (tempValue) {
+
+                                            case "Author":
+                                                obj.setAuthor(shot.getValue().toString());
+                                                break;
+
+                                            case "Location":
+                                                obj.setFilePath(shot.getValue().toString());
+                                                break;
+
+                                            case "Title":
+                                                obj.setName(shot.getValue().toString());
+                                                break;
+
+                                            default:
+                                                break;
+                                        }
+                                    } catch (NullPointerException e) {
+                                        e.printStackTrace();
+                                    }
+                                }//iterating through track information
+                                //need to send out that there is a new track within the file system
+                                //or send back a the new audio object
                                 
                             }
-
                             @Override
                             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
@@ -212,7 +245,6 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                             }
                         });
                     }
-
 
                     break;
                 default:
