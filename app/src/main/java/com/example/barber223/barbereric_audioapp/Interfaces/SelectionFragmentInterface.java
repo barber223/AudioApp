@@ -14,11 +14,7 @@ public  interface SelectionFragmentInterface {
 
     ArrayList<String> categories();
 
-     interface Cloud {
-        void setCurrentCategoryToSearch(String _activeCategory);
-    }
-
-    //Need
+    void setCurrentCategoryToSearch(String _activeCategory);
 
 }
 

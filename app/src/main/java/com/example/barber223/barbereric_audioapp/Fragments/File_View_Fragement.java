@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
+import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
 import com.example.barber223.barbereric_audioapp.baseAdapter;
@@ -30,6 +31,9 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
 
     //listener for the file information interface
     private InformationInterface mInfoListener;
+
+    //i guess i need another interfacve Listener
+    private cloudInformationInterface mCloudAdaptionInterface;
 
     ArrayList<String> categories;
 
@@ -54,6 +58,9 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
         }
         if (context instanceof InformationInterface){
             mInfoListener = (InformationInterface) context;
+        }
+        if (context instanceof cloudInformationInterface){
+            mCloudAdaptionInterface = (cloudInformationInterface) context;
         }
     }
     //need a way for 3 different views within for data
@@ -165,9 +172,6 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("ListItemSelected", "I wonder how without a setonItemClick listener");
-
-
-
-
+        mCloudAdaptionInterface.setCurrentCategoryToSearch(categories.get(position));
     }
 }

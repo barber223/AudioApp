@@ -75,6 +75,11 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
     }
 
     @Override
+    public void setCurrentCategoryToSearch(String _activeCategory) {
+
+    }
+
+    @Override
     public void play() {
 
     }

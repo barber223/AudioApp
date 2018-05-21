@@ -121,6 +121,11 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     }
 
     @Override
+    public void setCurrentCategoryToSearch(String _activeCategory) {
+
+    }
+
+    @Override
     public void play() {
 
     }

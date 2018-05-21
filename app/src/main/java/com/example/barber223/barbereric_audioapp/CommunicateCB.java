@@ -186,6 +186,9 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 Log.i("Well Shit:", "There is somthing here@!");
+
+                                //it calls YAY
+                                
                             }
 
                             @Override

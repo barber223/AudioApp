@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class CloudViewActivity extends AppCompatActivity implements SelectionFragmentInterface,
-        SelectionFragmentInterface.Cloud, cloudInformationInterface
+         cloudInformationInterface
 {
 
     private String activeDeviceProcess = KeyClassHolder.action_cloud;
@@ -125,6 +125,11 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     @Override
     public void setCurrentCategoryToSearch(String _activeCategory) {
+        //Need to execute the service to allow the comunication to traspire
+        //need to create a new instance a task can only be excuded once
+        desiredCategory = _activeCategory;
+        cb = new CommunicateCB(this);
+        cb.execute(KeyClassHolder.key_action_pullTrackList);
 
     }
 }
