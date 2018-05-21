@@ -37,6 +37,7 @@ import com.example.barber223.barbereric_audioapp.R;
 import com.example.barber223.barbereric_audioapp.Services.MediaRecorderServiceClass;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class RecordMainActivity extends AppCompatActivity implements SelectionFragmentInterface,
         RecordInformationFragment.PlayBackCommandListener, InformationInterface, View.OnClickListener,
@@ -112,6 +113,11 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     @Override
     public String getActiveProcess() {
         return activeDeviceProcess;
+    }
+
+    @Override
+    public ArrayList<String> categories() {
+        return null;
     }
 
     @Override

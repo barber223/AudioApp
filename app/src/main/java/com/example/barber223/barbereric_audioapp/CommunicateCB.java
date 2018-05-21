@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,12 +48,20 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     private ArrayList<String> categories;
 
+    private cloudInformationInterface mListener;
+
 
 
     //This method is used to pull audio file base TODO:// work through this methos and subregate
     public CommunicateCB (Context _context){
         mContext = _context;
 
+        //need to set up the interface listener for communication
+        if (mContext instanceof cloudInformationInterface){
+            mListener = (cloudInformationInterface) _context;
+        }
+
+        /*
         mStorageRef = FirebaseStorage.getInstance().getReference();
         File localFile = null;
         try {
@@ -90,6 +99,8 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
             }
         });
 
+        */
+
     }
 
     //doesnt do anything
@@ -125,6 +136,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                     mDBRef.orderByChild("Audio").addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                             Log.i("SnapShot:", "\n " + dataSnapshot.toString());
                             Iterable<DataSnapshot> files = dataSnapshot.getChildren();
                             categories = new ArrayList<String>();
@@ -134,6 +146,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                 String key = shot.getKey();
                                 categories.add(key);
                             }
+                            onPostExecute("Fuck");
                         }
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -170,5 +183,11 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
     }
 
-
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        if (categories != null && mListener != null){
+            mListener.returnOfCategories(categories);
+        }
+    }
 }

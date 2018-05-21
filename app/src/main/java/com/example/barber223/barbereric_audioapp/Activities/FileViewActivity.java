@@ -22,6 +22,7 @@ import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class FileViewActivity extends AppCompatActivity implements SelectionFragmentInterface,
         RecordInformationFragment.PlayBackCommandListener, InformationInterface {
@@ -66,6 +67,11 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
     @Override
     public String getActiveProcess() {
         return activeDeviceProcess;
+    }
+
+    @Override
+    public ArrayList<String> categories() {
+        return null;
     }
 
     @Override
