@@ -137,6 +137,13 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
                 .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
 
     }
+
+    @Override
+    public ArrayList<AudioFileObject> passAudioObjectList() {
+        return mTracks;
+    }
+
+
 }
 
 

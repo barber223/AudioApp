@@ -35,4 +35,9 @@ public class AudioFileObject {
         author = _author;
         filePath = _filePath;
     }
+
+    @Override
+    public String toString() {
+        return "Title: " + name + "\n    " + "Author: " + author;
+    }
 }

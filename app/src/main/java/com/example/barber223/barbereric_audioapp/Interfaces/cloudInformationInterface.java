@@ -10,4 +10,7 @@ public interface cloudInformationInterface {
     void setCurrentCategoryToSearch(String _activeCategory);
 
     void passNewAudioObject (AudioFileObject _obj);
+
+
+    ArrayList<AudioFileObject> passAudioObjectList();
 }

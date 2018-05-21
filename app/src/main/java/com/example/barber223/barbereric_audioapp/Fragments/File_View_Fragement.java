@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.barber223.barbereric_audioapp.AudioFileObject;
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
@@ -36,6 +37,7 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
     private cloudInformationInterface mCloudAdaptionInterface;
 
     ArrayList<String> categories;
+    String[] tracks;
 
     public static File_View_Fragement newInstance() {
 
@@ -105,6 +107,29 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                 case KeyClassHolder.key_action_pullTrackList:
                     //Load the same as cat but with cats and a little bit of seprate functionality;
                     //TODO finish this to allow the tracks to be displayed
+
+                    ArrayList<AudioFileObject> mTrack = mCloudAdaptionInterface.passAudioObjectList();
+
+                    if (mTrack != null) {
+                        tracks = new String[mTrack.size()];
+                        String track = "";
+                        for(int i = 0;i < tracks.length -1; i ++){
+                            tracks[0] = mTrack.get(i).toString();
+                            //add to list for adapter
+                        }
+
+                        //Create adapter for display in views list
+                        ArrayAdapter<String> mAdapter = new ArrayAdapter<>(
+                                getActivity(),
+                                android.R.layout.simple_list_item_1
+                        );
+                        mAdapter.addAll(tracks);
+
+                        this.setListAdapter(mAdapter);
+
+                    }
+
+
                     break;
 
                case KeyClassHolder.action_file:
