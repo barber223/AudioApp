@@ -125,11 +125,11 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
     @Override
     protected String doInBackground(String... strings) {
         if (strings != null) {
+            DatabaseReference mDBRef;
 
             switch (strings[0]) {
                 case KeyClassHolder.key_action_pullCats:
                     //this will be used to pull all of the categories within the database
-                    DatabaseReference mDBRef;
 
                     mDBRef = FirebaseDatabase.getInstance().getReference();
                     final DatabaseReference categorys = mDBRef.child("Audio");
@@ -168,10 +168,53 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                     });
                     break;
 
-                case ";":
+                case KeyClassHolder.key_action_pullTrackList:
+                        // need to dig through the database childs to pull the different tracks within the file system
+                    //Tricky part will be having Track ad the key and track0 as track but will be able to pull through the
+                    // and pull the different tracks, do you think the user would like to see the title within the track
+                    // or can there be multiple tracks with the same not being unique?
+                    String desiredCategory = mListener.getCurrentCategoryToDisplay();
+                    if (!desiredCategory.equals("")){
+                        //There is a category for me to dig to
+
+//TODO: Need tp finish this or fix it not sure yet
+                        mDBRef = FirebaseDatabase.getInstance().getReference();
+                       // final DatabaseReference categorys = mDBRef.child("Audio");
+
+
+                        mDBRef.orderByChild("Audio/"+desiredCategory).addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                Log.i("Well Shit:", "There is somthing here@!");
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
 
                     break;
                 default:
+                    Log.i("CommunicateCB://","There is no task to perform");
+                    Toast.makeText(mContext, "There is an issue please contact developer", Toast.LENGTH_LONG).show();
                     break;
             }
         }

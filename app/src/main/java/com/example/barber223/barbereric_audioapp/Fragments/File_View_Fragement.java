@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
@@ -61,12 +63,15 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         //perform method
         pulldata();
+
+
     }
     private void pulldata(){
         //start the intent service
         if (mListener != null){
             switch (mListener.getActiveProcess()){
-               case KeyClassHolder.action_cloud:
+
+                case KeyClassHolder.action_cloud:
 
                    //This will need to pull the data from the cloud bucket
                    //need to obatin the list of categories from the cloud activity if it is not null :)
@@ -86,8 +91,8 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
 
                         this.setListAdapter(stringadapter);
                     }
-
-
+                    //Thgis will only get selectded whent there is the items from the cloud becauser only in the cloud
+                    //view users will be able to select the category
 
 
 
@@ -114,6 +119,15 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
 
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ListView listView = view.findViewById(android.R.id.list);
+        if (listView != null){
+            listView.setOnItemClickListener(this);
         }
     }
 
@@ -151,5 +165,9 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("ListItemSelected", "I wonder how without a setonItemClick listener");
+
+
+
+
     }
 }

@@ -4,4 +4,7 @@ import java.util.ArrayList;
 
 public interface cloudInformationInterface {
     void returnOfCategories(ArrayList<String> _categories);
+    String getCurrentCategoryToDisplay();
+
+
 }

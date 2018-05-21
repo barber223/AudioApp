@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class CloudViewActivity extends AppCompatActivity implements SelectionFragmentInterface,
-        cloudInformationInterface
+        SelectionFragmentInterface.Cloud, cloudInformationInterface
 {
 
     private String activeDeviceProcess = KeyClassHolder.action_cloud;
@@ -36,6 +36,8 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     private ArrayList<String> categories;
 
     private CommunicateCB cb;
+
+    private String desiredCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +105,26 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     }
 
+
     @Override
     public void returnOfCategories(ArrayList<String> _categories) {
+
         categories = _categories;
         getFragmentManager().beginTransaction()
-                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+               .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+
+    }
+
+    @Override
+    public String getCurrentCategoryToDisplay() {
+        if (desiredCategory != null){
+            return desiredCategory;
+        }
+        return "";
+    }
+
+    @Override
+    public void setCurrentCategoryToSearch(String _activeCategory) {
 
     }
 }

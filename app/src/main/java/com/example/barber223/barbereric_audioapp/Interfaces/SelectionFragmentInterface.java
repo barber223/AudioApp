@@ -6,7 +6,7 @@ package com.example.barber223.barbereric_audioapp.Interfaces;
 
 import java.util.ArrayList;
 
-public interface SelectionFragmentInterface {
+public  interface SelectionFragmentInterface {
 
     void actionOfViewS(String _action);
 
@@ -14,4 +14,12 @@ public interface SelectionFragmentInterface {
 
     ArrayList<String> categories();
 
+     interface Cloud {
+        void setCurrentCategoryToSearch(String _activeCategory);
+    }
+
+    //Need
+
 }
+
+
