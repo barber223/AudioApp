@@ -2,12 +2,15 @@ package com.example.barber223.barbereric_audioapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
@@ -70,20 +73,32 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
         ViewHolder holder;
 
-        if (convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.base_adapter_view, parent, false);
-            holder = new ViewHolder();
-            holder.textView = convertView.findViewById(R.id.text_view);
-            holder.deleteButton = convertView.findViewById(R.id.delete_btn);
-            convertView.setTag(holder);
-        }
-        else{
-            holder = (ViewHolder) convertView.getTag();
-        }
-        setClickListener(holder.deleteButton);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.base_adapter_view, parent, false);
+                holder = new ViewHolder();
+                holder.textView = convertView.findViewById(R.id.text_view);
+                holder.deleteButton = convertView.findViewById(R.id.delete_btn);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            setClickListener(holder.deleteButton);
 
-        holder.textView.setText(mStrings[position]);
-        holder.deleteButton.setTag(position);
+            if (mActiveProcess.equals(KeyClassHolder.action_record)){
+                holder.textView.setText(mStrings[position]);
+                holder.deleteButton.setTag(position);
+            }
+            else if (mActiveProcess.equals(KeyClassHolder.action_file)){
+                holder.textView.setText(mStrings[position]);
+                holder.deleteButton.setTag(position);
+
+            }else if (mActiveProcess.equals(KeyClassHolder.action_cloud)){
+                holder.textView.setText(mStrings[position]);
+                holder.deleteButton.setTag(position);
+                Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_play_arrow_black_24dp);
+                holder.deleteButton.setImageBitmap(bmp);
+            }
+
 
         return convertView;
     }
@@ -96,12 +111,17 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
     @Override
     public void onClick(View v) {
 
-            final int position = (Integer) v.getTag();
+
+            final int position = (Integer) v.getTag(KeyClassHolder.key_request_cloud_categories);
+
             final String catName = mStrings[position];
 
             // now that I have the value of which object was selected
             // I need the ability to select the delete button option with the use of the alert dialog builder
-            File pStorage = mContext.getExternalFilesDir(null);
+
+
+
+        File pStorage = mContext.getExternalFilesDir(null);
             final File categoriesFolder = new File(pStorage, "AudioFiles");
 
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);

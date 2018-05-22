@@ -18,4 +18,8 @@ public class KeyClassHolder {
     //Process keys for the communicateCB async task//
     public static final String key_action_pullCats = "Categories";
     public static final String key_action_pullTrackList = "pulling_track_list_from_selected.category";
+
+
+    public static final int key_request_cloud_categories = 0x101;
+    public static final int getKey_request_cloud_tracks = 0x10101;
 }

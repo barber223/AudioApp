@@ -183,7 +183,6 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
             Log.i("g", "g");
 
-
         }
 
         if (mRSC != null && mRSC.getCurrentStat() == MediaRecorderServiceClass.STATE_RECORDING){
