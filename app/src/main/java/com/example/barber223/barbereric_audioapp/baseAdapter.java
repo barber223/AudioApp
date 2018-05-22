@@ -26,6 +26,7 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
     private InformationInterface mListener;
 
+
     private String mActiveProcess;
 
     private int currentHighlightedPosition = -1;
@@ -94,7 +95,7 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
             }else if (mActiveProcess.equals(KeyClassHolder.action_cloud)){
                 holder.textView.setText(mStrings[position]);
-                holder.deleteButton.setTag(position);
+                holder.deleteButton.setTag( position);
                 Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_play_arrow_black_24dp);
                 holder.deleteButton.setImageBitmap(bmp);
             }
@@ -111,43 +112,75 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
     @Override
     public void onClick(View v) {
 
+        int position = -1;
 
-            final int position = (Integer) v.getTag(KeyClassHolder.key_request_cloud_categories);
+        switch (mActiveProcess){
+            case KeyClassHolder.action_cloud:
+                position = (Integer) v.getTag();
+                //need to pull from the cloud storage
+                if (position != -1 && mListener != null){
+                    mListener.passPosition(position);
+                }
 
-            final String catName = mStrings[position];
+                break;
 
-            // now that I have the value of which object was selected
-            // I need the ability to select the delete button option with the use of the alert dialog builder
+            case KeyClassHolder.action_file:
+                //for now will contain usual operatorions of removing a cat, soon
+                    //need adding of another button to allow the ability to play the entire list of tracks from
+                    //directory
+                position = (Integer) v.getTag();
+                deleteFileFromSystem(position);
+                break;
+
+            case KeyClassHolder.action_cloud_tracks:
+                //might need to change to allow the ability to play specified Track
+               position = (Integer) v.getTag();
+               mListener.passPosition(position);
+                break;
+
+            case KeyClassHolder.action_record:
+                //Record load normal Removal of categories
+                position = (Integer) v.getTag();
+                deleteFileFromSystem(position);
+                break;
+        }
 
 
+
+    }
+    //For deletion of a category at a selected position
+    private void deleteFileFromSystem( int _position){
+        final String catName = mStrings[_position];
+
+        // now that I have the value of which object was selected
+        // I need the ability to select the delete button option with the use of the alert dialog builder
 
         File pStorage = mContext.getExternalFilesDir(null);
-            final File categoriesFolder = new File(pStorage, "AudioFiles");
+        final File categoriesFolder = new File(pStorage, "AudioFiles");
 
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-            builder.setTitle("Are you sure?");
-            builder.setMessage("If you delete this category all of files within this category will be deleted"
-                    + "\n Category: " + mStrings[position]
-            );
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
+        builder.setTitle("Are you sure?");
+        builder.setMessage("If you delete this category all of files within this category will be deleted"
+                + "\n Category: " + mStrings[_position]
+        );
 
-            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    File fileToDelete = new File(categoriesFolder, catName);
-                    //delete the file from the system
-                    fileToDelete.delete();
-                    //Need to force reload all of the information within the file system being displayed
-                    mListener.forceReload();
-                }
-            });
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.show();
-
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                File fileToDelete = new File(categoriesFolder, catName);
+                //delete the file from the system
+                fileToDelete.delete();
+                //Need to force reload all of the information within the file system being displayed
+                mListener.forceReload();
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     @Override

@@ -12,9 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.barber223.barbereric_audioapp.Activities.CloudViewActivity;
+import com.example.barber223.barbereric_audioapp.AudioFileObject;
+import com.example.barber223.barbereric_audioapp.CommunicateCB;
+import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
+import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
 
+import java.util.ArrayList;
+
 public class RecordInformationFragment extends Fragment implements View.OnClickListener {
+
+    private cloudInformationInterface mCloudListener;
 
     public static RecordInformationFragment newInstance() {
 
@@ -67,6 +76,9 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         if (context instanceof PlayBackCommandListener){
             mListener = (PlayBackCommandListener) context;
         }
+        if (context instanceof cloudInformationInterface){
+            mCloudListener = (cloudInformationInterface)context;
+        }
     }
 
     @Override
@@ -84,6 +96,17 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
             view.findViewById(R.id.record_btn).setOnClickListener(this);
             view.findViewById(R.id.add_categoryButton).setOnClickListener(this);
         }
+
+        try {
+            ArrayList<AudioFileObject> mTracks = mCloudListener.passAudioObjectList();
+            if (mTracks != null) {
+                CommunicateCB cb = new CommunicateCB(getContext());
+                cb.equals(KeyClassHolder.key_action_pull_audioTracks);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

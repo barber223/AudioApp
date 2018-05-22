@@ -153,6 +153,11 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
                 .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
     }
 
+    @Override
+    public void passPosition(int _position) {
+        //Will need to pull the track information
+    }
+
 
     private void addNewCategoryToSystem(String _categoryName){
 

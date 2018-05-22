@@ -15,6 +15,7 @@ import com.example.barber223.barbereric_audioapp.CommunicateCB;
 import com.example.barber223.barbereric_audioapp.Fragments.Activity_Selection_Fragment_Top;
 import com.example.barber223.barbereric_audioapp.Fragments.File_View_Fragement;
 import com.example.barber223.barbereric_audioapp.Fragments.RecordInformationFragment;
+import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
@@ -25,10 +26,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CloudViewActivity extends AppCompatActivity implements SelectionFragmentInterface,
-         cloudInformationInterface
+         cloudInformationInterface, InformationInterface
 {
 
     private String activeDeviceProcess = KeyClassHolder.action_cloud;
@@ -143,7 +145,36 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
         return mTracks;
     }
 
+    @Override
+    public void playAudioFiles(ArrayList<AudioFileObject> _objsToPlay) {
+        if (_objsToPlay != null){
 
+        }
+    }
+
+
+    @Override
+    public File[] getcategoryList() {
+        return new File[0];
+    }
+
+    @Override
+    public void forceReload() {
+
+    }
+
+    @Override
+    public void passPosition(int _position) {
+        //song to play
+        int songToPlay = _position;
+
+        ArrayList<AudioFileObject> objs = new ArrayList<>();
+        objs.add(mTracks.get(songToPlay));
+
+        CommunicateCB cb = new CommunicateCB(this);
+        cb.execute(KeyClassHolder.key_action_pull_audioTracks);
+
+    }
 }
 
 

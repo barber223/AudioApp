@@ -4,7 +4,6 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.example.barber223.barbereric_audioapp.AudioFileObject;
 import com.example.barber223.barbereric_audioapp.Interfaces.InformationInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
@@ -25,7 +22,7 @@ import com.example.barber223.barbereric_audioapp.baseAdapter;
 import java.io.File;
 import java.util.ArrayList;
 
-public class File_View_Fragement extends ListFragment implements AdapterView.OnItemClickListener {
+public class File_View_Fragement extends ListFragment implements AdapterView.OnItemClickListener, InformationInterface {
 
     //need a listener to see if were pulling from the cloud or the file system
     private SelectionFragmentInterface mListener;
@@ -73,8 +70,6 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         //perform method
         pulldata();
-
-
     }
     private void pulldata(){
         //start the intent service
@@ -86,19 +81,15 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                    //This will need to pull the data from the cloud bucket
                    //need to obatin the list of categories from the cloud activity if it is not null :)
                      categories = mListener.categories();
-
                     if (categories != null){
 
                         String[] cats = new String[categories.size()];
-
                         for (int i = 0 ; i < categories.size(); i ++){
                             cats[i] = categories.get(i);
                         }
-
                         ArrayAdapter<String> stringadapter = new ArrayAdapter<String>(getActivity(),
                                 android.R.layout.simple_list_item_1);
                         stringadapter.addAll(cats);
-
                         this.setListAdapter(stringadapter);
                     }
                     //Thgis will only get selectded whent there is the items from the cloud becauser only in the cloud
@@ -113,13 +104,16 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                     if (mTrack != null) {
                         tracks = new String[mTrack.size()];
                         String track = "";
-
                         String author = "";
+                        String notes = "";
+
                         for(int i = 0;i < tracks.length; i ++){
 
                             track = mTrack.get(i).getName();
                             author = mTrack.get(i).getAuthor();
-                            tracks[i] = track + "\n    " + author;
+                            notes = mTrack.get(i).getNotes();
+                            tracks[i] = "Title:\n  " + track + "\nAuthor:\n  " + author
+                            + "\nNotes:\n  " + notes;
                             //add to list for adapter
                         }
                         baseAdapter adp = new baseAdapter(tracks, getContext(),KeyClassHolder.action_cloud);
@@ -156,7 +150,6 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
             listView.setOnItemClickListener(this);
         }
     }
-
     private String[] getListOfCategoryNames(){
         //this will need to pull the data from the users devices file system
 
@@ -192,5 +185,25 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("ListItemSelected", "I wonder how without a setonItemClick listener");
         mCloudAdaptionInterface.setCurrentCategoryToSearch(categories.get(position));
+    }
+
+    @Override
+    public File[] getcategoryList() {//Not used
+        return null;
+    }
+
+    @Override
+    public void forceReload() {//NOt used
+
+    }
+
+    @Override
+    public void passPosition(int _position) {
+        //used from base adapter
+        AudioFileObject activeobj = mTrack.get(_position);
+        if (activeobj != null){
+            //need this to populate into the Record information views;
+
+        }
     }
 }

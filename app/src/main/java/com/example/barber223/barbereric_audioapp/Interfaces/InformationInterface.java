@@ -5,5 +5,5 @@ import java.io.File;
 public interface InformationInterface {
     File[] getcategoryList();
     void forceReload();
-
+    void passPosition(int _position);
 }

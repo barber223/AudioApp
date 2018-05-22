@@ -64,47 +64,6 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
         if (mContext instanceof cloudInformationInterface){
             mListener = (cloudInformationInterface) _context;
         }
-
-        /*
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("test", ".mp3");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        StorageReference storage = mStorageRef.child("Music").child("Beats").child("Bill-Bailey-Wont-You-Please-Come-Home_FULL_WSR1802001.mp3");
-
-
-        final File finalLocalFile = localFile;
-        StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = storage.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Boolean b = finalLocalFile.canRead();
-
-                if (b) {
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    try {
-                        mediaPlayer.setDataSource(finalLocalFile.getAbsolutePath());
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        */
-
     }
 
     //doesnt do anything
@@ -146,26 +105,30 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                             Log.i("SnapShot:", "\n " + dataSnapshot.toString());
                             Iterable<DataSnapshot> files = dataSnapshot.getChildren();
                             categories = new ArrayList<String>();
-                            for (DataSnapshot shot: files){
-                                Log.i("looping: Shot" , "\n " + shot.toString());
+                            for (DataSnapshot shot : files) {
+                                Log.i("looping: Shot", "\n " + shot.toString());
                                 //pull all of the keys and add them to a list to populate the categories within the list
                                 String key = shot.getKey();
                                 categories.add(key);
                             }
                             onPostExecute("Fuck");
                         }
+
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                         }
+
                         @Override
                         public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                         }
+
                         @Override
                         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
@@ -175,93 +138,141 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                     break;
 
                 case KeyClassHolder.key_action_pullTrackList:
-                        // need to dig through the database childs to pull the different tracks within the file system
+                    // need to dig through the database childs to pull the different tracks within the file system
                     //Tricky part will be having Track ad the key and track0 as track but will be able to pull through the
                     // and pull the different tracks, do you think the user would like to see the title within the track
                     // or can there be multiple tracks with the same not being unique?
                     String desiredCategory = mListener.getCurrentCategoryToDisplay();
-                    if (!desiredCategory.equals("")){
+                    if (!desiredCategory.equals("")) {
                         //There is a category for me to dig to
 
-//TODO: Need tp finish this or fix it not sure yet
+                        //TODO: Need tp finish this or fix it not sure yet
                         mDBRef = FirebaseDatabase.getInstance().getReference();
-                       // final DatabaseReference categorys = mDBRef.child("Audio");
-
-
-
+                        // final DatabaseReference categorys = mDBRef.child("Audio");
 
                         mDBRef.child("Audio").child(desiredCategory)
                                 .addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    @Override
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                                Iterable<DataSnapshot> files = dataSnapshot.getChildren();
+                                        Iterable<DataSnapshot> files = dataSnapshot.getChildren();
 
-                                mAudioTracksInformation =  new AudioFileObject("", "", "");
+                                        mAudioTracksInformation = new AudioFileObject("", "", "", "");
 
-                                for (DataSnapshot shot : files) {
-                                    try {
-                                        String tempValue = shot.getKey();
-                                        switch (tempValue) {
+                                        for (DataSnapshot shot : files) {
+                                            try {
+                                                String tempValue = shot.getKey();
+                                                switch (tempValue) {
 
-                                            case "Author":
-                                                mAudioTracksInformation.setAuthor(shot.getValue().toString());
-                                                break;
+                                                    case "Author":
+                                                        mAudioTracksInformation.setAuthor(shot.getValue().toString());
+                                                        break;
 
-                                            case "Location":
-                                                mAudioTracksInformation.setFilePath(shot.getValue().toString());
-                                                break;
+                                                    case "Location":
+                                                        mAudioTracksInformation.setFilePath(shot.getValue().toString());
+                                                        break;
 
-                                            case "Title":
-                                                mAudioTracksInformation.setName(shot.getValue().toString());
-                                                break;
+                                                    case "Title":
+                                                        mAudioTracksInformation.setName(shot.getValue().toString());
+                                                        break;
 
-                                            default:
-                                                break;
-                                        }
-                                    } catch (NullPointerException e) {
-                                        e.printStackTrace();
+                                                    case "Notes":
+                                                        mAudioTracksInformation.setNotes(shot.getValue().toString());
+                                                        break;
+
+                                                    default:
+                                                        break;
+                                                }
+                                            } catch (NullPointerException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }//iterating through track information
+                                        //need to send out that there is a new track within the file system
+                                        //or send back a the new audio object
+                                        onPostExecute("hello");
                                     }
-                                }//iterating through track information
-                                //need to send out that there is a new track within the file system
-                                //or send back a the new audio object
-                                onPostExecute("hello");
-                            }
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                            }
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                    }
 
-                            }
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                    }
 
-                            }
+                                    @Override
+                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                    }
 
-                            }
-                        });
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                     }
 
                     break;
+
+                case KeyClassHolder.key_action_pull_audioTracks:
+
+                    mStorageRef = FirebaseStorage.getInstance().getReference();
+                    File localFile = null;
+
+                    try {
+                      localFile = File.createTempFile("folder", ".mp3");
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //need to split
+                    String[] data = new String[2];
+
+                    ArrayList<AudioFileObject> MTracks = mListener.passAudioObjectList();
+                    StorageReference storage = null;
+
+                    for(AudioFileObject obj : MTracks)
+                    {
+                        data = obj.getFilePath().split("/");
+                        storage   = mStorageRef.child("Music").child(data[0]).child(data[1]);
+                    }
+
+                    final File finalLocalFile = localFile;
+                    StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = storage.getFile(localFile)
+                            .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Boolean b = finalLocalFile.canRead();
+                                    if (b) {
+                                        MediaPlayer mediaPlayer = new MediaPlayer();
+                                        try {
+                                            mediaPlayer.setDataSource(finalLocalFile.getAbsolutePath());
+                                            mediaPlayer.prepare();
+                                            mediaPlayer.start();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+
+                    break;
+
                 default:
-                    Log.i("CommunicateCB://","There is no task to perform");
+                    Log.i("CommunicateCB://", "There is no task to perform");
                     Toast.makeText(mContext, "There is an issue please contact developer", Toast.LENGTH_LONG).show();
                     break;
             }
         }
-
-
-
-
         return "Hekki";
-
     }
 
     @Override

@@ -305,6 +305,10 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
                 .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
     }
 
+    @Override
+    public void passPosition(int _position) {
+        //NOT NEEDED
+    }
 
     //This is for the alert dialog
     @Override
@@ -394,6 +398,8 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
                break;
         }
     }
+
+
     private void startRecording(){
 
         mRSC = new MediaRecorderServiceClass();
