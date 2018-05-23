@@ -13,5 +13,5 @@ public interface cloudInformationInterface {
 
     ArrayList<AudioFileObject> passAudioObjectList();
 
-    void playAudioFiles(ArrayList<AudioFileObject> _objsToPlay);
+    AudioFileObject getAudioFileToPlay();
 }

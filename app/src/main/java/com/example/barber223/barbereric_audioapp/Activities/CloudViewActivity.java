@@ -38,6 +38,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     private ArrayList<String> categories;
     private ArrayList<AudioFileObject> mTracks;
+    private AudioFileObject mTrackToPlay;
 
     private CommunicateCB cb;
 
@@ -146,10 +147,8 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     }
 
     @Override
-    public void playAudioFiles(ArrayList<AudioFileObject> _objsToPlay) {
-        if (_objsToPlay != null){
-
-        }
+    public AudioFileObject getAudioFileToPlay() {
+        return mTrackToPlay;
     }
 
 
@@ -166,14 +165,9 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     @Override
     public void passPosition(int _position) {
         //song to play
-        int songToPlay = _position;
-
-        ArrayList<AudioFileObject> objs = new ArrayList<>();
-        objs.add(mTracks.get(songToPlay));
-
+        mTrackToPlay = mTracks.get(_position);
         CommunicateCB cb = new CommunicateCB(this);
         cb.execute(KeyClassHolder.key_action_pull_audioTracks);
-
     }
 }
 

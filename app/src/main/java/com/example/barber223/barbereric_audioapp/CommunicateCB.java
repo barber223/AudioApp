@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
-public class CommunicateCB extends AsyncTask<String, String, String>{
+public class CommunicateCB extends AsyncTask<String, String, String> implements ChildEventListener{
 
     private Context mContext;
 
@@ -53,8 +53,6 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
     private AudioFileObject mAudioTracksInformation;
 
     private String mTaskToPerform;
-
-
 
     //This method is used to pull audio file base TODO:// work through this methos and subregate
     public CommunicateCB (Context _context){
@@ -83,8 +81,6 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
         }
     }
 
-
-
     @Override
     protected String doInBackground(String... strings) {
         if (strings != null) {
@@ -98,43 +94,7 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
 
                     mDBRef = FirebaseDatabase.getInstance().getReference();
                     final DatabaseReference categorys = mDBRef.child("Audio");
-                    mDBRef.orderByChild("Audio").addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                            Log.i("SnapShot:", "\n " + dataSnapshot.toString());
-                            Iterable<DataSnapshot> files = dataSnapshot.getChildren();
-                            categories = new ArrayList<String>();
-                            for (DataSnapshot shot : files) {
-                                Log.i("looping: Shot", "\n " + shot.toString());
-                                //pull all of the keys and add them to a list to populate the categories within the list
-                                String key = shot.getKey();
-                                categories.add(key);
-                            }
-                            onPostExecute("Fuck");
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-
-                    });
+                    mDBRef.orderByChild("Audio").addChildEventListener(this);
                     break;
 
                 case KeyClassHolder.key_action_pullTrackList:
@@ -145,100 +105,31 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                     String desiredCategory = mListener.getCurrentCategoryToDisplay();
                     if (!desiredCategory.equals("")) {
                         //There is a category for me to dig to
-
-                        //TODO: Need tp finish this or fix it not sure yet
                         mDBRef = FirebaseDatabase.getInstance().getReference();
                         // final DatabaseReference categorys = mDBRef.child("Audio");
-
                         mDBRef.child("Audio").child(desiredCategory)
-                                .addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                                        Iterable<DataSnapshot> files = dataSnapshot.getChildren();
-
-                                        mAudioTracksInformation = new AudioFileObject("", "", "", "");
-
-                                        for (DataSnapshot shot : files) {
-                                            try {
-                                                String tempValue = shot.getKey();
-                                                switch (tempValue) {
-
-                                                    case "Author":
-                                                        mAudioTracksInformation.setAuthor(shot.getValue().toString());
-                                                        break;
-
-                                                    case "Location":
-                                                        mAudioTracksInformation.setFilePath(shot.getValue().toString());
-                                                        break;
-
-                                                    case "Title":
-                                                        mAudioTracksInformation.setName(shot.getValue().toString());
-                                                        break;
-
-                                                    case "Notes":
-                                                        mAudioTracksInformation.setNotes(shot.getValue().toString());
-                                                        break;
-
-                                                    default:
-                                                        break;
-                                                }
-                                            } catch (NullPointerException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }//iterating through track information
-                                        //need to send out that there is a new track within the file system
-                                        //or send back a the new audio object
-                                        onPostExecute("hello");
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
+                                .addChildEventListener(this);
                     }
-
                     break;
 
                 case KeyClassHolder.key_action_pull_audioTracks:
 
                     mStorageRef = FirebaseStorage.getInstance().getReference();
-                    File localFile = null;
-
+                     File localFile = null;
                     try {
-                      localFile = File.createTempFile("folder", ".mp3");
-
+                        localFile = File.createTempFile("temp", ".mp3");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     //need to split
-                    String[] data = new String[2];
+                    String[] data = null;
 
-                    ArrayList<AudioFileObject> MTracks = mListener.passAudioObjectList();
+                   AudioFileObject mTrack = mListener.getAudioFileToPlay();
                     StorageReference storage = null;
 
-                    for(AudioFileObject obj : MTracks)
-                    {
-                        data = obj.getFilePath().split("/");
-                        storage   = mStorageRef.child("Music").child(data[0]).child(data[1]);
-                    }
+                        data = mTrack.getFilePath().split("/");
+                        storage = mStorageRef.child("Music").child(data[0]).child(data[1]);
 
                     final File finalLocalFile = localFile;
                     StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = storage.getFile(localFile)
@@ -246,6 +137,8 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     Boolean b = finalLocalFile.canRead();
+
+                                    /*
                                     if (b) {
                                         MediaPlayer mediaPlayer = new MediaPlayer();
                                         try {
@@ -256,6 +149,8 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                             e.printStackTrace();
                                         }
                                     }
+                                    */
+                                    onPostExecute(finalLocalFile.getAbsolutePath());
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -263,7 +158,6 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                                     e.printStackTrace();
                                 }
                             });
-
                     break;
 
                 default:
@@ -272,13 +166,17 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
                     break;
             }
         }
-        return "Hekki";
+        return "Nothing";
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        if (categories != null && mListener != null) {
+        if (!s.equals("") && !s.equals(null) && !s.equals("Nothing")){
+            Log.i("g", "g");
+            //need to send this to the media player to allow the ability to create the media player
+        }
+        else if (categories != null && mListener != null) {
             mListener.returnOfCategories(categories);
         }
         else if (mAudioTracksInformation != null && mListener != null){
@@ -286,6 +184,77 @@ public class CommunicateCB extends AsyncTask<String, String, String>{
         }
     }
 
+    //Handling responses from the datasnap shot from database
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
+        if (mTaskToPerform.equals(KeyClassHolder.key_action_pullTrackList)) {
+            Iterable<DataSnapshot> files = dataSnapshot.getChildren();
+
+            mAudioTracksInformation = new AudioFileObject("", "", "", "");
+
+            for (DataSnapshot shot : files) {
+                try {
+                    String tempValue = shot.getKey();
+                    switch (tempValue) {
+
+                        case "Author":
+                            mAudioTracksInformation.setAuthor(shot.getValue().toString());
+                            break;
+
+                        case "Location":
+                            mAudioTracksInformation.setFilePath(shot.getValue().toString());
+                            break;
+
+                        case "Title":
+                            mAudioTracksInformation.setName(shot.getValue().toString());
+                            break;
+
+                        case "Notes":
+                            mAudioTracksInformation.setNotes(shot.getValue().toString());
+                            break;
+
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }//iterating through track information
+            //need to send out that there is a new track within the file system
+            //or send back a the new audio object
+            onPostExecute("Nothing");
+        }// task pull track list
+
+        else if (mTaskToPerform.equals(KeyClassHolder.key_action_pullCats)) {
+            Log.i("SnapShot:", "\n " + dataSnapshot.toString());
+            Iterable<DataSnapshot> files = dataSnapshot.getChildren();
+            categories = new ArrayList<String>();
+            for (DataSnapshot shot : files) {
+                Log.i("looping: Shot", "\n " + shot.toString());
+                //pull all of the keys and add them to a list to populate the categories within the list
+                String key = shot.getKey();
+                categories.add(key);
+            }
+            onPostExecute("Nothing");
+        }//Action_pull categories
+
+    }
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
+    }
 }
