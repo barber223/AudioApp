@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.barber223.barbereric_audioapp.Activities.CloudViewActivity;
 import com.example.barber223.barbereric_audioapp.AudioFileObject;
 import com.example.barber223.barbereric_audioapp.CommunicateCB;
+import com.example.barber223.barbereric_audioapp.Interfaces.SelectionFragmentInterface;
 import com.example.barber223.barbereric_audioapp.Interfaces.cloudInformationInterface;
 import com.example.barber223.barbereric_audioapp.KeyClassHolder;
 import com.example.barber223.barbereric_audioapp.R;
@@ -24,6 +26,9 @@ import java.util.ArrayList;
 public class RecordInformationFragment extends Fragment implements View.OnClickListener {
 
     private cloudInformationInterface mCloudListener;
+
+    private SelectionFragmentInterface mSelectionListener;
+
 
     public static RecordInformationFragment newInstance() {
 
@@ -79,6 +84,9 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         if (context instanceof cloudInformationInterface){
             mCloudListener = (cloudInformationInterface)context;
         }
+        if (context instanceof SelectionFragmentInterface){
+            mSelectionListener = (SelectionFragmentInterface) context;
+        }
     }
 
     @Override
@@ -86,6 +94,50 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         super.onActivityCreated(savedInstanceState);
 
         View view = getView();
+
+        //need acess if this will be used as a recorder or as a player
+
+        String activeProcess = mSelectionListener.getActiveProcess();
+
+        switch (mSelectionListener.getActiveProcess()){
+            case KeyClassHolder.key_action_pullCats:
+
+                disableButtonsForCloud(view);
+
+                break;
+
+            case KeyClassHolder.action_file:
+                activateAllViews(view);
+                break;
+
+
+            case KeyClassHolder.action_record:
+                activateAllViews(view);
+                break;
+        }
+
+    }
+
+    private void disableButtonsForCloud(View view){
+        if (view != null){
+            //need to remove specific buttons
+            Log.i("CloudMenu_", "Going to be removing unneccassary buttons");
+
+            view.findViewById(R.id.play_btn).setOnClickListener(this);
+            view.findViewById(R.id.pause_btn).setOnClickListener(this);
+            view.findViewById(R.id.save_btn).setEnabled(false);
+
+            view.findViewById(R.id.skip_forward_btn).setEnabled(false);
+            view.findViewById(R.id.track_notes).setEnabled(false);
+            view.findViewById(R.id.track_information_edit_text).setEnabled(false);
+            view.findViewById(R.id.record_btn).setEnabled(false);
+            view.findViewById(R.id.add_categoryButton).setEnabled(false);
+
+        }
+
+    }
+
+    private void activateAllViews(View view){
         if (view != null){
             view.findViewById(R.id.play_btn).setOnClickListener(this);
             view.findViewById(R.id.pause_btn).setOnClickListener(this);
@@ -96,17 +148,6 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
             view.findViewById(R.id.record_btn).setOnClickListener(this);
             view.findViewById(R.id.add_categoryButton).setOnClickListener(this);
         }
-
-        try {
-            ArrayList<AudioFileObject> mTracks = mCloudListener.passAudioObjectList();
-            if (mTracks != null) {
-                CommunicateCB cb = new CommunicateCB(getContext());
-                cb.equals(KeyClassHolder.key_action_pull_audioTracks);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
     }
 
     @Override
