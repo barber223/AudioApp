@@ -34,7 +34,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 {
 
     private String activeDeviceProcess = KeyClassHolder.action_cloud;
-    private String activeDBProcess = KeyClassHolder.key_action_pullCats;
+    private String activeDBProcess = KeyClassHolder.action_cloud_tracks;
 
     private ArrayList<String> categories;
     private ArrayList<AudioFileObject> mTracks;
@@ -87,8 +87,10 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     @Override
     public String getActiveProcess() {
-        return activeDBProcess;
+        return activeDeviceProcess;
     }
+
+
 
     @Override
     public ArrayList<String> categories() {
@@ -98,7 +100,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
     private void pullCategoies(){
         cb.execute(KeyClassHolder.key_action_pullCats);
-        activeDBProcess = KeyClassHolder.key_action_pullCats;
+        activeDeviceProcess = KeyClassHolder.key_action_pullCats;
     }
 
     @Override
@@ -133,7 +135,7 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
 
         mTracks.add(_obj);
         //need to set the active process
-        activeDBProcess = KeyClassHolder.key_action_pullTrackList;
+        activeDeviceProcess = KeyClassHolder.key_action_pullTrackList;
 
         //need to reset the fragment
         getFragmentManager().beginTransaction()
@@ -149,6 +151,11 @@ public class CloudViewActivity extends AppCompatActivity implements SelectionFra
     @Override
     public AudioFileObject getAudioFileToPlay() {
         return mTrackToPlay;
+    }
+
+    @Override
+    public String getActiveDataBaseAction() {
+        return activeDBProcess;
     }
 
 

@@ -121,7 +121,6 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
                 if (position != -1 && mListener != null){
                     mListener.passPosition(position);
                 }
-
                 break;
 
             case KeyClassHolder.action_file:
@@ -202,6 +201,7 @@ public class baseAdapter extends BaseAdapter implements View.OnClickListener, Vi
 
             if (categoriesFolder.listFiles() != null){
                 //there is audio tracks within this category
+
             }else{
                 // load there is no data
 

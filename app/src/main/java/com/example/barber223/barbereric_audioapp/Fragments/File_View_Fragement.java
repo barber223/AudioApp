@@ -74,12 +74,18 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
     private void pulldata(){
         //start the intent service
         if (mListener != null){
+
+            String g = mListener.getActiveProcess();
             switch (mListener.getActiveProcess()){
 
-                case KeyClassHolder.key_action_pullCats:
+                //TODO:// Fix issue with key for the active process.
+
+                    //Cloud is the only one where the activity selection fragment top is different from the file
+                        // case list
+                case KeyClassHolder.action_cloud:
 
                    //This will need to pull the data from the cloud bucket
-                   //need to obatin the list of categories from the cloud activity if it is not null :)
+                   //need to obtain the list of categories from the cloud activity if it is not null :)
                      categories = mListener.categories();
                     if (categories != null){
 
@@ -92,10 +98,11 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                         stringadapter.addAll(cats);
                         this.setListAdapter(stringadapter);
                     }
-                    //Thgis will only get selectded whent there is the items from the cloud becauser only in the cloud
+                    //This will only get selected went there is the items from the cloud becauser only in the cloud
                     //view users will be able to select the category
                 break;
 
+                    //This is a part of action cloud
                 case KeyClassHolder.key_action_pullTrackList:
                     //Load the same as cat but with cats and a little bit of separate functionality;
                     //TODO finish this to allow the tracks to be displayed
@@ -138,8 +145,31 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                         this.setListAdapter(adapter);
                     }
                     break;
+
+                    default:
+                        Log.i("Need to fix this Issue within cloud pulling?ActiveProcess:\n" , mListener.getActiveProcess()
+                                + "\nActiveDBPro: " + mCloudAdaptionInterface.getActiveDataBaseAction() );
+
+                        if (mCloudAdaptionInterface.getActiveDataBaseAction().equals(KeyClassHolder.action_cloud_tracks)){
+                            categories = mListener.categories();
+                            if (categories != null){
+
+                                String[] cats = new String[categories.size()];
+                                for (int i = 0 ; i < categories.size(); i ++){
+                                    cats[i] = categories.get(i);
+                                }
+                                ArrayAdapter<String> stringadapter = new ArrayAdapter<String>(getActivity(),
+                                        android.R.layout.simple_list_item_1);
+                                stringadapter.addAll(cats);
+                                this.setListAdapter(stringadapter);
+                            }
+                        }
+
+
+                        break;
             }
         }
+
     }
 
     @Override

@@ -14,4 +14,6 @@ public interface cloudInformationInterface {
     ArrayList<AudioFileObject> passAudioObjectList();
 
     AudioFileObject getAudioFileToPlay();
+
+    String getActiveDataBaseAction();
 }

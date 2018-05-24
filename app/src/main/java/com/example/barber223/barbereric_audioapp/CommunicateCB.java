@@ -175,6 +175,8 @@ public class CommunicateCB extends AsyncTask<String, String, String> implements 
         if (!s.equals("") && !s.equals(null) && !s.equals("Nothing")){
             Log.i("g", "g");
             //need to send this to the media player to allow the ability to create the media player
+        
+
         }
         else if (categories != null && mListener != null) {
             mListener.returnOfCategories(categories);

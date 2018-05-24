@@ -156,6 +156,7 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
     @Override
     public void passPosition(int _position) {
         //Will need to pull the track information
+
     }
 
 
