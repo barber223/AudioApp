@@ -7,6 +7,9 @@
 - can delete cat files
 - can start working through the starting of the recording process
 - can open the cloud and listen to a basic file (No Working Buttons)
+- can record but they do not show
+- can navagate between view
+- can view all files within the database
 
 # Summary
 
