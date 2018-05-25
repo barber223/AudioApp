@@ -138,7 +138,7 @@ public class CommunicateCB extends AsyncTask<String, String, String> implements 
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     Boolean b = finalLocalFile.canRead();
 
-                                    /*
+
                                     if (b) {
                                         MediaPlayer mediaPlayer = new MediaPlayer();
                                         try {
@@ -149,7 +149,7 @@ public class CommunicateCB extends AsyncTask<String, String, String> implements 
                                             e.printStackTrace();
                                         }
                                     }
-                                    */
+
                                     onPostExecute(finalLocalFile.getAbsolutePath());
                                 }
                             }).addOnFailureListener(new OnFailureListener() {

@@ -2,6 +2,8 @@ package com.example.barber223.barbereric_audioapp.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -55,8 +57,6 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         void stop();
 
         void save();
-
-        void newCategory();
 
         void record(String _title);
 
@@ -124,14 +124,14 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
             Log.i("CloudMenu_", "Going to be removing unneccassary buttons");
 
             view.findViewById(R.id.play_btn).setOnClickListener(this);
-            view.findViewById(R.id.pause_btn).setOnClickListener(this);
+            view.findViewById(R.id.play_btn).setTag("p");
             view.findViewById(R.id.save_btn).setEnabled(false);
 
             view.findViewById(R.id.skip_forward_btn).setEnabled(false);
             view.findViewById(R.id.track_notes).setEnabled(false);
             view.findViewById(R.id.track_information_edit_text).setEnabled(false);
             view.findViewById(R.id.record_btn).setEnabled(false);
-            view.findViewById(R.id.add_categoryButton).setEnabled(false);
+            //view.findViewById(R.id.add_categoryButton).setEnabled(false);
 
         }
 
@@ -140,13 +140,22 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
     private void activateAllViews(View view){
         if (view != null){
             view.findViewById(R.id.play_btn).setOnClickListener(this);
-            view.findViewById(R.id.pause_btn).setOnClickListener(this);
+            view.findViewById(R.id.play_btn).setTag("p");
+
             view.findViewById(R.id.save_btn).setOnClickListener(this);
             view.findViewById(R.id.skip_forward_btn).setOnClickListener(this);
+
+            if (mSelectionListener.getActiveProcess().equals(KeyClassHolder.action_record)){
+               ImageButton ib = view.findViewById(R.id.skip_forward_btn);
+               //need to remove this button from the view within recording
+                ib.setImageBitmap(null);
+                ib.setBackgroundColor(0);
+            }
+
             view.findViewById(R.id.track_notes).setOnClickListener(this);
             view.findViewById(R.id.track_information_edit_text).setOnClickListener(this);
             view.findViewById(R.id.record_btn).setOnClickListener(this);
-            view.findViewById(R.id.add_categoryButton).setOnClickListener(this);
+            //view.findViewById(R.id.add_categoryButton).setOnClickListener(this);
         }
     }
 
@@ -158,10 +167,18 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
         switch (v.getId()){
             case R.id.play_btn:
                 mListener.play();
-                break;
+                ImageButton p = v.findViewById(R.id.play_btn);
 
-            case R.id.pause_btn:
-                mListener.pause();
+                if (p.getTag().equals("p")){
+                    p.setTag("pa");
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_pause_black_24dp);
+                    p.setImageBitmap(bmp);
+                }else{
+                    p.setTag("p");
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_play_arrow_black_24dp);
+                    p.setImageBitmap(bmp);
+                }
+
                 break;
 
             case R.id.save_btn:
@@ -194,13 +211,6 @@ public class RecordInformationFragment extends Fragment implements View.OnClickL
                 }else{
                     Toast.makeText(getContext(), "There please add Title", Toast.LENGTH_SHORT).show();
                 }
-
-
-                break;
-
-            case R.id.add_categoryButton:
-                //this needs to pop an alert for adding a new category
-                mListener.newCategory();
                 break;
         }
     }

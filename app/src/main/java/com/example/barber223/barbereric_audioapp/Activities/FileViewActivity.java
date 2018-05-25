@@ -10,6 +10,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -99,8 +102,46 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
 
     }
 
+
+
     @Override
-    public void newCategory() {
+    public void record(String _title) {
+
+    }
+
+
+    @Override
+    public void seekBarWasAltered(int _newPosition) {
+
+    }
+
+    @Override
+    public File[] getcategoryList() {
+        File pStorage = getExternalFilesDir(null);
+        File categoriesFolder = new File(pStorage, "AudioFiles");
+        return categoriesFolder.listFiles();
+    }
+
+    @Override
+    public void forceReload() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+    }
+    @Override
+    public void passPosition(int _position) {
+        //Will need to pull the track information
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_category_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         //pop up a alert asking for the new category name
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Category");
@@ -127,39 +168,8 @@ public class FileViewActivity extends AppCompatActivity implements SelectionFrag
             }
         });
         builder.show();
+        return true;
     }
-
-    @Override
-    public void record(String _title) {
-
-    }
-
-
-    @Override
-    public void seekBarWasAltered(int _newPosition) {
-
-    }
-
-    @Override
-    public File[] getcategoryList() {
-        File pStorage = getExternalFilesDir(null);
-        File categoriesFolder = new File(pStorage, "AudioFiles");
-        return categoriesFolder.listFiles();
-    }
-
-    @Override
-    public void forceReload() {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
-    }
-
-    @Override
-    public void passPosition(int _position) {
-        //Will need to pull the track information
-
-    }
-
-
     private void addNewCategoryToSystem(String _categoryName){
 
         if (!_categoryName.equals("")){

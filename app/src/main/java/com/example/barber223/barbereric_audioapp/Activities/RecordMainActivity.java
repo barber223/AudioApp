@@ -17,6 +17,9 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -70,9 +73,10 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
         String[] mPermissions = {Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
 
-        if (!hasPermisisons(this, mPermissions)){
+        if (!hasPermisisons(this, mPermissions)) {
             ActivityCompat.requestPermissions(this, mPermissions, 0x0101);
         }
+
     }
 
     private boolean hasPermisisons(Context _context, String... permissions){
@@ -143,36 +147,6 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
     @Override
     public void save() {
 
-    }
-
-    @Override
-    public void newCategory() {
-        //pop up a alert asking for the new category name
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Category");
-
-        final EditText input = new EditText(this);
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!input.getText().toString().equals("")){
-                    addNewCategoryToSystem(input.getText().toString());
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
-                }
-            }
-        });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
     }
 
     @Override
@@ -254,6 +228,44 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_category_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //pop up a alert asking for the new category name
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Category");
+
+        final EditText input = new EditText(this);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!input.getText().toString().equals("")){
+                    addNewCategoryToSystem(input.getText().toString());
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.files_fragment_frame, File_View_Fragement.newInstance()).commit();
+                }
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+        return true;
+    }
+
     private void addNewCategoryToSystem(String _categoryName){
 
         if (!_categoryName.equals("")){
@@ -261,9 +273,7 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
 
             File pStorage = getExternalFilesDir(null);
             File categoriesFolder = new File(pStorage, "AudioFiles");
-
             categoriesFolder.mkdir();
-
             File[] files = categoriesFolder.listFiles();
 
             //need to check to make sure there is not already a file with the category

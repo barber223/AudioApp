@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,13 +18,15 @@
             android:layout_height="wrap_content"
             android:text="@string/empty"
             android:hint="@string/title_placeHolder"
+            android:contentDescription="@string/empty"
             />
-
         <ImageButton
-            android:id="@+id/add_categoryButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_add_black_24dp"
+            android:id="@+id/record_btn"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@xml/couner_radius"
+            android:src="@drawable/record_iconpng_01"
+            android:contentDescription="@string/empty"
             />
 
     </LinearLayout>
@@ -57,13 +61,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/track_notes"
             android:layout_width="300dp"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            android:inputType="textAutoComplete"
+            />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -75,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_save_black_24dp"
+                android:contentDescription="@string/empty"
                 />
 
             <ImageButton
@@ -82,13 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_play_arrow_black_24dp"
-                />
-
-            <ImageButton
-                android:id="@+id/pause_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_pause_black_24dp"
+                android:contentDescription="@string/empty"
                 />
 
             <ImageButton
@@ -96,16 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_skip_next_black_24dp"
+                android:contentDescription="@string/empty"
                 />
-
-            <ImageButton
-                android:id="@+id/record_btn"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:src="@drawable/record_iconpng_01"
-                android:background="@xml/couner_radius"
-                />
-
 
         </LinearLayout>
 

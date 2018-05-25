@@ -4,4 +4,5 @@
     <string name="cancel">Cancel</string>
     <string name="start_recording">Start Recording</string>
     <string name="title_placeHolder">Title</string>
+    <string name="add_category">Add Category</string>
 </resources>
