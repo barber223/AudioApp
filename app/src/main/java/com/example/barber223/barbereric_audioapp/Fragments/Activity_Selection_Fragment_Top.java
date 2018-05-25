@@ -69,9 +69,6 @@ public class Activity_Selection_Fragment_Top extends Fragment implements View.On
             case KeyClassHolder.key_action_pullCats:
                 cloudBtn.setTextColor(getResources().getColor(R.color.selected_menu_textAccent, null));
                 break;
-
-
-
             case KeyClassHolder.action_file:
                 filesBtn.setTextColor(getResources().getColor(R.color.selected_menu_textAccent, null));
                 break;

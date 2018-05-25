@@ -164,12 +164,9 @@ public class File_View_Fragement extends ListFragment implements AdapterView.OnI
                                 this.setListAdapter(stringadapter);
                             }
                         }
-
-
                         break;
             }
         }
-
     }
 
     @Override

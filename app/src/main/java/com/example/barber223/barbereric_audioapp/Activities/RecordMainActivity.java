@@ -102,12 +102,23 @@ public class RecordMainActivity extends AppCompatActivity implements SelectionFr
             case KeyClassHolder.action_cloud:
                 Intent newActivity = new Intent(this, CloudViewActivity.class);
                 newActivity.setAction(KeyClassHolder.action_cloud);
+
+                //Need to stop the recording if it is active
+                if (mRSC != null){
+                    mRSC.stopRecording();
+                }
+
                 startActivity(newActivity);
                 break;
 
             case KeyClassHolder.action_file:
                 Intent activity = new Intent(this, FileViewActivity.class);
                 activity.setAction(KeyClassHolder.action_file);
+
+                //Need to stop the recording if it is active
+                if (mRSC != null){
+                    mRSC.stopRecording();
+                }
                 startActivity(activity);
                 break;
         }
